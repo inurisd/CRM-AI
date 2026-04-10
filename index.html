@@ -621,7 +621,7 @@ function show(id) {
   const el = $(id);
   if (!el) return;
   if (el.classList.contains('overlay') || el.id === 'login-screen') el.classList.remove('off');
-  else el.style.display = '';
+  else el.style.display = 'block';
 }
 function hide(id) {
   const el = $(id);
