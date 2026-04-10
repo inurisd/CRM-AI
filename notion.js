@@ -1,9 +1,7 @@
-// /api/notion.js
-// Vercel Serverless Function — Notion API 프록시
-// 이 파일을 GitHub 저장소의 /api/notion.js 위치에 저장하세요
+// /api/notion.js — Vercel Serverless Function
+// GitHub 저장소의 /api/notion.js 위치에 저장하세요
 
 export default async function handler(req, res) {
-  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-notion-key');
@@ -12,9 +10,9 @@ export default async function handler(req, res) {
   const apiKey = req.headers['x-notion-key'];
   if (!apiKey) return res.status(401).json({ error: 'API key missing' });
 
-  // URL에서 /api/notion 이후 경로 추출
-  // 예: /api/notion/databases/xxx/query → /databases/xxx/query
-  const notionPath = req.url.replace(/^\/api\/notion/, '') || '/';
+  // Vercel에서 쿼리스트링으로 경로를 받음
+  // index.html에서 /api/notion?path=/databases/xxx/query 형태로 호출
+  const notionPath = req.query.path || '/';
 
   try {
     const notionRes = await fetch('https://api.notion.com/v1' + notionPath, {
