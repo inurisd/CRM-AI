@@ -1,834 +1,469 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>아이누리 CRM 워크스페이스 - 전문 관리자 모드</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* ── [1] 디자인 시스템 변수 정의 ── */
-        :root {
-            --ink: #1a1714;
-            --ink-m: #6b6560;
-            --ink-f: #c5bfb9;
-            --paper: #faf8f5;
-            --warm: #f2ede6;
-            --card: #ffffff;
-            --accent: #2d6a4f;
-            --accent-l: #e8f4ee;
-            --accent-m: #52b788;
-            --warn: #c45c26;
-            --warn-l: #fdf0e8;
-            --info: #1e6091;
-            --info-l: #e8f1f8;
-            --purple: #6b3fa0;
-            --purple-l: #f0eaf8;
-            --gold: #b5831a;
-            --gold-l: #fdf6e3;
-            --bd: #e8e2da;
-            --sh: 0 1px 3px rgba(26,23,20,.07), 0 4px 16px rgba(26,23,20,.04);
-            --sh-lg: 0 8px 32px rgba(26,23,20,.13);
-            --r: 12px;
-            --rs: 8px;
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>아이누리 CRM 워크스페이스</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── [SECTION 1] CSS Variables & Base Styles (원본 복원) ── */
+:root {
+  --ink: #1a1714; --ink-m: #6b6560; --ink-f: #c5bfb9;
+  --paper: #faf8f5; --warm: #f2ede6; --card: #ffffff;
+  --accent: #2d6a4f; --accent-l: #e8f4ee; --accent-m: #52b788;
+  --warn: #c45c26; --warn-l: #fdf0e8;
+  --info: #1e6091; --info-l: #e8f1f8;
+  --purple: #6b3fa0; --purple-l: #f0eaf8;
+  --gold: #b5831a; --gold-l: #fdf6e3;
+  --bd: #e8e2da;
+  --sh: 0 1px 3px rgba(26,23,20,.07), 0 4px 16px rgba(26,23,20,.04);
+  --sh-lg: 0 8px 32px rgba(26,23,20,.13);
+  --r: 10px; --rs: 6px;
+}
 
-        /* ── [2] 기본 스타일 초기화 ── */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-        }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+body { font-family: 'Pretendard', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; font-size: 14px; line-height: 1.6; }
+main { padding: 20px 2.5% 100px; width: 95%; max-width: 1800px; margin: 0 auto; }
 
-        body {
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-            background-color: var(--paper);
-            color: var(--ink);
-            line-height: 1.6;
-            letter-spacing: -0.01em;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
+/* ── [SECTION 2] Login Screen (상세 스타일 복원) ── */
+#login-screen { position: fixed; inset: 0; background: var(--paper); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+#login-screen.off { display: none; }
+.login-box { background: var(--card); border-radius: 24px; padding: 56px 48px; max-width: 420px; width: 90%; box-shadow: var(--sh-lg); border: 1px solid var(--bd); text-align: center; }
+.login-logo { font-family: 'Nanum Myeongjo', serif; font-size: 32px; font-weight: 800; color: var(--accent); margin-bottom: 8px; letter-spacing: -0.02em; }
+.login-sub { font-size: 14px; color: var(--ink-m); margin-bottom: 40px; line-height: 1.6; font-weight: 400; }
+.pw-wrap { position: relative; margin-bottom: 16px; }
+.pw-input { width: 100%; padding: 15px 16px; border: 2px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 16px; color: var(--ink); background: var(--paper); outline: none; transition: all .2s; text-align: center; letter-spacing: 0.1em; }
+.pw-input:focus { border-color: var(--accent-m); background: #fff; }
+.pw-toggle { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--ink-f); font-size: 18px; padding: 4px; }
+.login-btn { width: 100%; padding: 15px; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: background .2s; }
+.login-btn:hover { background: #1e4a36; }
+.login-error { font-size: 13px; color: var(--warn); margin-top: 12px; min-height: 20px; font-weight: 500; }
+.login-remember { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; cursor: pointer; }
+.login-remember input { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
+.login-remember span { font-size: 13px; color: var(--ink-m); }
 
-        /* ── [3] 로그인 인터페이스 ── */
-        #login-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--paper);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease;
-        }
+/* ── [SECTION 3] Header & Navigation (원본 복원) ── */
+header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 500; padding: 0 2.5%; }
+.brand { font-family: 'Nanum Myeongjo', serif; font-size: 18px; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+.bdot { width: 8px; height: 8px; background: var(--accent-m); border-radius: 50%; box-shadow: 0 0 8px var(--accent-m); }
+.hright { display: flex; align-items: center; gap: 12px; }
+.qbadge { background: var(--warn-l); color: var(--warn); font-size: 11px; font-weight: 800; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(196,92,38,0.2); }
+.hsm { padding: 8px 16px; background: var(--warm); border: 1px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 600; color: var(--ink-m); cursor: pointer; transition: all .2s; }
+.hsm:hover { background: var(--accent-l); color: var(--accent); border-color: var(--accent-m); }
+.hsm.ghost { background: transparent; border: none; }
 
-        #login-screen.off {
-            opacity: 0;
-            pointer-events: none;
-        }
+.fbar { background: var(--card); border-bottom: 1px solid var(--bd); display: flex; align-items: center; overflow-x: auto; padding: 0 2.5%; scrollbar-width: none; }
+.fbar::-webkit-scrollbar { display: none; }
+.ftab { padding: 16px 20px; font-size: 14px; font-weight: 600; color: var(--ink-m); cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; background: none; border-left: none; border-right: none; border-top: none; font-family: 'Pretendard', sans-serif; transition: all .2s; }
+.ftab.on { color: var(--accent); border-bottom-color: var(--accent); }
+.tcnt { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 6px; background: var(--warm); border-radius: 10px; font-size: 11px; font-weight: 700; margin-left: 6px; color: var(--ink-m); }
+.ftab.on .tcnt { background: var(--accent-l); color: var(--accent); }
 
-        .login-box {
-            background: var(--card);
-            padding: 60px 50px;
-            border-radius: 24px;
-            box-shadow: var(--sh-lg);
-            border: 1px solid var(--bd);
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-        }
+/* ── [SECTION 4] Main CRM Table (원본 디테일) ── */
+.thead { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+.ttitle { font-family: 'Nanum Myeongjo', serif; font-size: 22px; font-weight: 800; color: var(--ink); }
+.tmeta { font-size: 13px; color: var(--ink-m); }
 
-        .login-logo {
-            font-family: 'Nanum Myeongjo', serif;
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--accent);
-            margin-bottom: 12px;
-        }
+.crm-tbl { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--card); border: 1px solid var(--bd); border-radius: var(--r); overflow: hidden; box-shadow: var(--sh); table-layout: fixed; }
+.crm-tbl thead tr { background: var(--warm); }
+.crm-tbl th { padding: 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-m); text-align: left; border-bottom: 1px solid var(--bd); }
+.crm-tbl tbody tr { border-bottom: 1px solid var(--bd); transition: background .15s; }
+.crm-tbl tbody tr:hover { background: #fdfcfa; }
+.crm-tbl td { padding: 18px 14px; vertical-align: top; border-bottom: 1px dotted var(--bd); }
+.crm-tbl tr:last-child td { border-bottom: none; }
 
-        .login-desc {
-            font-size: 14px;
-            color: var(--ink-m);
-            margin-bottom: 40px;
-        }
+/* ── [SECTION 5] New Components (메모 & 수정창) ── */
+.memo-wrap-outer { position: relative; }
+.memo-box { background: var(--warm); border-left: 3px solid var(--bd); border-radius: 0 var(--rs) var(--rs) 0; padding: 12px 14px; font-size: 13px; color: var(--ink-m); line-height: 1.7; white-space: pre-wrap; word-break: break-all; max-height: 5.2em; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+.memo-box.open { max-height: 2000px; background: #fff; border-color: var(--accent-m); }
+.memo-box:not(.open).has-more::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 30px; background: linear-gradient(transparent, var(--warm)); pointer-events: none; }
+.more-btn { display: block; width: 100%; padding: 6px; margin-top: 8px; background: var(--bd); border: none; border-radius: 4px; color: var(--ink-m); font-size: 11px; font-weight: 600; cursor: pointer; text-align: center; transition: all .2s; }
+.more-btn:hover { background: var(--ink-f); color: #fff; }
 
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
+.draft-wrap { position: relative; }
+.draft-text { font-size: 14px; line-height: 1.8; color: var(--ink); background: var(--card); border: 1.5px solid var(--bd); border-radius: var(--rs); padding: 14px 40px 14px 14px; white-space: pre-wrap; word-break: break-all; min-height: 100px; transition: border-color .2s; }
+.draft-wrap:hover .draft-text { border-color: var(--accent-m); }
+.edit-btn { position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; border: 1px solid var(--bd); border-radius: var(--rs); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink-m); opacity: 0; transition: all .2s; box-shadow: var(--sh); }
+.draft-wrap:hover .edit-btn { opacity: 1; }
+.edit-btn:hover { color: var(--accent); border-color: var(--accent); }
 
-        .pw-field {
-            width: 100%;
-            padding: 15px;
-            border: 1.5px solid var(--bd);
-            border-radius: var(--rs);
-            font-size: 16px;
-            outline: none;
-            transition: var(--transition);
-            text-align: center;
-        }
+.ep { margin-top: 12px; padding: 16px; border: 1px solid var(--accent-m); background: #f9fdfb; border-radius: var(--rs); display: none; animation: slideDown 0.3s ease-out; }
+.ep.on { display: block; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.erow { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.elabel { font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-m); margin-bottom: 8px; display: block; }
+.etxt { width: 100%; padding: 12px; background: #fff; border: 1.5px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 13px; color: var(--ink); resize: vertical; min-height: 140px; outline: none; line-height: 1.6; transition: border-color .2s; }
+.etxt:focus { border-color: var(--accent); }
+.esave-wrap { margin-top: 14px; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
+.esave { padding: 8px 20px; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .2s; }
 
-        .pw-field:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-l);
-        }
+/* ── [SECTION 6] Badges & Utilities (원본 복원) ── */
+.badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.bg { background: var(--accent-l); color: var(--accent); }
+.bo { background: var(--warn-l); color: var(--warn); }
+.bb { background: var(--info-l); color: var(--info); }
+.bp { background: var(--purple-l); color: var(--purple); }
+.bgo { background: var(--gold-l); color: var(--gold); }
+.bgr { background: var(--warm); color: var(--ink-m); }
 
-        .login-submit {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--accent);
-            color: white;
-            border: none;
-            border-radius: var(--rs);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
+.chk-wrap { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+.chk-wrap input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
+.chk-label { font-size: 12px; font-weight: 700; color: var(--ink-m); }
 
-        .login-submit:hover {
-            background-color: #1b4d36;
-            transform: translateY(-1px);
-        }
+/* ── [SECTION 7] Floating Bar & Modal (원본 복원) ── */
+.add-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--bd); padding: 10px 2.5%; display: flex; align-items: center; gap: 14px; box-shadow: 0 -4px 20px rgba(26,23,20,.08); z-index: 600; height: 64px; }
+.chart-inp { padding: 10px 16px; border: 2px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 14px; font-weight: 600; width: 200px; outline: none; transition: border-color .2s; }
+.chart-inp:focus { border-color: var(--accent); }
+.btn-plus { width: 42px; height: 42px; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+.btn-plus:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(45,106,79,0.3); }
 
-        /* ── [4] 레이아웃 및 헤더 ── */
-        header {
-            background-color: var(--card);
-            height: 64px;
-            border-bottom: 1px solid var(--bd);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 32px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+#toast { position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 40px; color: #fff; font-size: 14px; font-weight: 600; box-shadow: var(--sh-lg); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s; }
+#toast.on { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(-10px); }
+#toast.ok { background: var(--accent); }
+#toast.err { background: var(--warn); }
 
-        .header-left { display: flex; align-items: center; gap: 15px; }
-        .system-title {
-            font-family: 'Nanum Myeongjo', serif;
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--accent);
-        }
-
-        .nav-actions { display: flex; gap: 10px; }
-        .nav-btn {
-            background: none; border: 1px solid var(--bd);
-            padding: 6px 14px; border-radius: 6px; font-size: 12px;
-            color: var(--ink-m); cursor: pointer; transition: var(--transition);
-        }
-        .nav-btn:hover { background: var(--warm); color: var(--ink); }
-
-        /* ── [5] 필터 네비게이션 ── */
-        .filter-nav {
-            background: var(--card);
-            border-bottom: 1px solid var(--bd);
-            padding: 0 32px;
-            display: flex;
-            gap: 5px;
-            overflow-x: auto;
-            position: sticky;
-            top: 64px;
-            z-index: 999;
-        }
-
-        .filter-item {
-            padding: 14px 18px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--ink-m);
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: var(--transition);
-            white-space: nowrap;
-        }
-
-        .filter-item:hover { color: var(--accent); }
-        .filter-item.active {
-            color: var(--accent);
-            border-bottom-color: var(--accent);
-            background-color: var(--accent-l);
-        }
-
-        .filter-count {
-            font-size: 10px;
-            margin-left: 5px;
-            opacity: 0.5;
-        }
-
-        /* ── [6] 메인 데이터 테이블 ── */
-        main { padding: 30px 32px 120px; max-width: 1600px; margin: 0 auto; }
-
-        .table-container {
-            background: var(--card);
-            border-radius: var(--r);
-            border: 1px solid var(--bd);
-            box-shadow: var(--sh);
-            overflow: hidden;
-        }
-
-        .main-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        .main-table th {
-            background-color: var(--warm);
-            padding: 14px;
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--ink-m);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-bottom: 1px solid var(--bd);
-            text-align: left;
-        }
-
-        .main-table td {
-            padding: 20px 14px;
-            border-bottom: 1px solid var(--bd);
-            vertical-align: top;
-        }
-
-        .main-table tr:hover { background-color: #fdfbf8; }
-
-        /* ── [7] 메모 히스토리 및 펼치기 효과 ── */
-        .memo-wrapper { position: relative; width: 100%; }
-        .memo-scroll-area {
-            position: relative;
-            max-height: 5.4em; /* 약 3줄 */
-            overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 13px;
-        }
-        .memo-scroll-area.expanded { max-height: 1500px; }
-
-        /* 하단 그라데이션 */
-        .memo-scroll-area:not(.expanded).has-history::after {
-            content: "";
-            position: absolute;
-            bottom: 0; left: 0; width: 100%; height: 30px;
-            background: linear-gradient(transparent, var(--card));
-            pointer-events: none;
-        }
-
-        .memo-entry {
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 1px dashed var(--bd);
-        }
-        .memo-entry:last-child { border-bottom: none; }
-
-        .memo-tag {
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--accent);
-            background: var(--accent-l);
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-right: 8px;
-        }
-
-        .expand-trigger {
-            display: block;
-            width: 100%;
-            padding: 6px;
-            margin-top: 8px;
-            background: var(--warm);
-            border: 1px solid var(--bd);
-            border-radius: 6px;
-            font-size: 11px;
-            color: var(--ink-m);
-            cursor: pointer;
-            text-align: center;
-        }
-
-        /* ── [8] CRM 초안 에디터 ── */
-        .draft-container { position: relative; }
-        .draft-preview {
-            background: var(--paper);
-            border: 1px solid var(--bd);
-            border-radius: var(--rs);
-            padding: 12px;
-            font-size: 13px;
-            color: var(--ink);
-            white-space: pre-wrap;
-            min-height: 80px;
-        }
-
-        .edit-panel {
-            display: none;
-            margin-top: 12px;
-            background: var(--warm);
-            padding: 15px;
-            border-radius: var(--rs);
-            animation: slideDown 0.3s ease;
-        }
-        .edit-panel.active { display: block; }
-
-        .draft-editor {
-            width: 100%;
-            height: 150px;
-            padding: 12px;
-            border: 1px solid var(--bd);
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 13px;
-            resize: vertical;
-            outline: none;
-        }
-
-        .action-row {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .btn-save { background: var(--accent); color: white; border: none; padding: 6px 15px; border-radius: 4px; cursor: pointer; font-weight: 600; }
-        .btn-cancel { background: var(--ink-f); color: white; border: none; padding: 6px 15px; border-radius: 4px; cursor: pointer; }
-
-        /* ── [9] 하단 관리 바 ── */
-        .admin-dock {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%;
-            background: var(--card);
-            border-top: 1px solid var(--bd);
-            padding: 15px 32px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            z-index: 1100;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            background: var(--paper);
-            border: 1.5px solid var(--bd);
-            border-radius: var(--rs);
-            padding: 2px 5px;
-            width: 300px;
-        }
-
-        .search-input {
-            border: none;
-            background: none;
-            padding: 10px;
-            width: 100%;
-            outline: none;
-            font-size: 14px;
-        }
-
-        .add-patient-btn {
-            margin-left: auto;
-            background: var(--ink);
-            color: white;
-            padding: 10px 20px;
-            border-radius: var(--rs);
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        /* ── [10] 모달 및 토스트 ── */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(26,23,20,0.7);
-            backdrop-filter: blur(5px);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s;
-        }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-
-        .modal-content {
-            background: white;
-            width: 90%; max-width: 550px;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: var(--sh-lg);
-        }
-
-        #toast {
-            position: fixed; bottom: 100px; right: 30px;
-            padding: 15px 25px; border-radius: 10px;
-            color: white; font-weight: 600; font-size: 14px;
-            transform: translateY(100px); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 3000; box-shadow: var(--sh-lg);
-        }
-        #toast.visible { transform: translateY(0); }
-        #toast.success { background: var(--accent); }
-        #toast.error { background: var(--warn); }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* 셀렉트 스타일 */
-        .status-select {
-            width: 100%;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid var(--bd);
-            font-size: 12px;
-            font-weight: 600;
-            background-color: white;
-            cursor: pointer;
-        }
-
-        .status-select.wait { color: var(--ink-m); }
-        .status-select.done { color: var(--accent); border-color: var(--accent); background-color: var(--accent-l); }
-    </style>
+/* ── [SECTION 8] Loading Spinner ── */
+#load-st { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 0; }
+.spin { width: 40px; height: 40px; border: 4px solid var(--bd); border-top-color: var(--accent); border-radius: 50%; animation: rot 0.8s linear infinite; margin-bottom: 16px; }
+@keyframes rot { to { transform: rotate(360deg); } }
+</style>
 </head>
 <body>
 
 <div id="login-screen">
-    <div class="login-box">
-        <div class="login-logo">🌿 아이누리 CRM</div>
-        <div class="login-desc">브랜드 네트워크 통합 관리 시스템</div>
-        <div class="input-group">
-            <input type="password" id="pw-input" class="pw-field" placeholder="액세스 비밀번호를 입력하세요" onkeydown="if(event.key==='Enter')attemptLogin()">
-        </div>
-        <button class="login-submit" onclick="attemptLogin()">시스템 접속</button>
-        <div id="login-feedback" style="margin-top:15px; font-size:12px; color:var(--warn);"></div>
+  <div class="login-box">
+    <div class="login-logo">🌿 아이누리</div>
+    <p class="login-sub">아이누리 CRM 워크스페이스<br>보안 비밀번호를 입력해 주세요.</p>
+    <div class="pw-wrap">
+      <input type="password" id="pw-input" class="pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="pw-toggle" onclick="togglePw()" id="pw-eye">👁</button>
     </div>
+    <button class="login-btn" onclick="doLogin()">인증 후 입장</button>
+    <p class="login-error" id="login-err"></p>
+    <label class="login-remember"><input type="checkbox" id="remember-chk" checked><span>로그인 상태 유지</span></label>
+  </div>
 </div>
 
 <header>
-    <div class="header-left">
-        <div class="system-title">아이누리 CRM 관리센터</div>
-        <span id="last-sync" style="font-size:11px; color:var(--ink-f);"></span>
-    </div>
-    <div class="nav-actions">
-        <button class="nav-btn" onclick="fetchData()">전체 새로고침</button>
-        <button class="nav-btn" onclick="processLogout()">로그아웃</button>
-    </div>
+  <div class="brand"><div class="bdot"></div>아이누리 CRM <span style="font-weight:400; font-size:14px; margin-left:8px; color:var(--ink-f)">v2.5</span></div>
+  <div class="hright">
+    <span class="qbadge" id="qcnt">데이터 확인 중...</span>
+    <button class="hsm" onclick="load()">↺ 새로고침</button>
+    <button class="hsm ghost" onclick="logout()">로그아웃</button>
+  </div>
 </header>
 
-<nav class="filter-nav" id="tab-nav">
-    <div class="filter-item active" onclick="applyFilter('전체', this)">전체 <span class="filter-count" id="cnt-all">0</span></div>
-    <div class="filter-item" onclick="applyFilter('복약안내', this)">💊 복약안내 <span class="filter-count" id="cnt-med">0</span></div>
-    <div class="filter-item" onclick="applyFilter('중간점검', this)">🔍 중간점검 <span class="filter-count" id="cnt-mid">0</span></div>
-    <div class="filter-item" onclick="applyFilter('종료전안내', this)">⏰ 종료전안내 <span class="filter-count" id="cnt-end">0</span></div>
-    <div class="filter-item" onclick="applyFilter('마무리상담', this)">🎯 마무리상담 <span class="filter-count" id="cnt-fin">0</span></div>
-</nav>
-
-<main>
-    <div id="loading-state" style="text-align:center; padding:100px 0;">
-        <div style="font-size:30px; margin-bottom:15px;">⏳</div>
-        <p style="color:var(--ink-m); font-weight:500;">노션 데이터베이스와 연결 중입니다...</p>
-    </div>
-
-    <div id="table-view" style="display:none;">
-        <div class="table-container">
-            <table class="main-table">
-                <thead>
-                    <tr>
-                        <th style="width:60px;">번호</th>
-                        <th style="width:130px;">환자 정보</th>
-                        <th style="width:360px;">상담 및 진료 기록 히스토리</th>
-                        <th>CRM 발송 초안</th>
-                        <th style="width:140px;">진행 상태</th>
-                    </tr>
-                </thead>
-                <tbody id="data-body"></tbody>
-            </table>
-        </div>
-    </div>
-</main>
-
-<div class="admin-dock">
-    <div style="font-size:13px; font-weight:700; color:var(--ink-m);">신규 조회/등록</div>
-    <div class="search-box">
-        <input type="text" id="chart-search-input" class="search-input" placeholder="차트번호 입력" onkeydown="if(event.key==='Enter')quickSearch()">
-        <button onclick="quickSearch()" style="background:var(--accent); color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">확인</button>
-    </div>
-    <button class="add-patient-btn" onclick="showModal('new-patient-modal')">+ 환자 직접 추가</button>
+<div class="fbar">
+  <button class="ftab on" onclick="setF('전체',this)">전체 <span class="tcnt" id="c-전체">0</span></button>
+  <button class="ftab" onclick="setF('복약안내',this)">💊 복약안내 <span class="tcnt" id="c-복약안내">0</span></button>
+  <button class="ftab" onclick="setF('중간점검',this)">🔍 중간점검 <span class="tcnt" id="c-중간점검">0</span></button>
+  <button class="ftab" onclick="setF('종료전안내',this)">⏰ 종료전안내 <span class="tcnt" id="c-종료전안내">0</span></button>
+  <button class="ftab" onclick="setF('마무리상담',this)">🎯 마무리상담 <span class="tcnt" id="c-마무리상담">0</span></button>
 </div>
 
-<div id="new-patient-modal" class="modal-overlay">
-    <div class="modal-content">
-        <h3 style="margin-bottom:20px; font-family:'Nanum Myeongjo'; color:var(--accent);">신규 내원 환자 등록</h3>
-        <input type="text" id="new-name" class="pw-field" style="text-align:left; margin-bottom:15px;" placeholder="환자 성함 (필수)">
-        <input type="text" id="new-chart" class="pw-field" style="text-align:left; margin-bottom:15px;" placeholder="차트번호">
-        <textarea id="new-memo" class="draft-editor" style="height:120px; margin-bottom:20px;" placeholder="초기 상담 내용 또는 진료 메모를 입력하세요."></textarea>
-        <div class="action-row">
-            <button class="btn-save" onclick="createNewPatient()">데이터베이스 저장</button>
-            <button class="btn-cancel" onclick="hideModal('new-patient-modal')">닫기</button>
-        </div>
+<main>
+  <div id="load-st">
+    <div class="spin"></div>
+    <p style="color:var(--ink-m); font-weight:600;">노션 데이터베이스 연결 중...</p>
+  </div>
+  
+  <div id="tbl-wrap" style="display:none">
+    <div class="thead">
+      <span class="ttitle" id="ttitle">전체 리스트</span>
+      <span class="tmeta" id="tmeta">오늘 처리할 환자 정보를 확인하세요.</span>
     </div>
+    <table class="crm-tbl">
+      <thead>
+        <tr>
+          <th style="width:50px; text-align:center">No.</th>
+          <th style="width:110px">환자 정보</th>
+          <th style="width:120px">처방 상세</th>
+          <th style="width:280px">진료 메모 (과거 기록 누적)</th>
+          <th>AI CRM 초안 및 수정</th>
+          <th style="width:140px; text-align:center">상태 관리</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        </tbody>
+    </table>
+  </div>
+</main>
+
+<div class="add-bar">
+  <span style="font-size:13px; font-weight:800; color:var(--accent);">QUICK ADD</span>
+  <input type="text" id="chart-q" class="chart-inp" placeholder="차트번호 입력" onkeydown="if(event.key==='Enter')addFromChart()">
+  <button class="btn-plus" onclick="addFromChart()">+</button>
+  <div style="margin-left:auto; color:var(--ink-f); font-size:12px;">© i-nuri Network. Data Sovereignty Protected.</div>
 </div>
 
 <div id="toast"></div>
 
 <script>
-    const CONFIG = {
-        dbId: '04f406a5be9b454b9dda793fac2d4fb4',
-        pageSize: 100
-    };
+/* ── [JS] Config & State ── */
+const DB_ID = '04f406a5be9b454b9dda793fac2d4fb4'; // 원본 DB ID 유지
+let patients = [];
+let curFilter = '전체';
+let sessionPw = '';
 
-    let globalStore = [];
-    let activeFilter = '전체';
-    let authCredential = '';
+/* ── [JS] Initialize ── */
+window.onload = () => {
+  const saved = localStorage.getItem('crm_pw_hint');
+  if (saved) {
+    sessionPw = saved;
+    document.getElementById('login-screen').classList.add('off');
+    load();
+  }
+};
 
-    // [시스템 기동]
-    window.addEventListener('DOMContentLoaded', () => {
-        const cached = localStorage.getItem('inuri_crm_auth');
-        if (cached) {
-            authCredential = cached;
-            document.getElementById('login-screen').classList.add('off');
-            fetchData();
-        }
+/* ── [JS] Core Logic (원본 복원) ── */
+async function load() {
+  show('load-st'); hide('tbl-wrap');
+  try {
+    const res = await notion(`/databases/${DB_ID}/query`, 'POST', {
+      sorts: [{ property: '한약수령일', direction: 'descending' }]
     });
+    patients = res.results.map(parse);
+    renderTable();
+    updateCounts();
+  } catch (e) {
+    toast('데이터를 불러오지 못했습니다.', 'err');
+  }
+}
 
-    // [로그인 로직]
-    async function attemptLogin() {
-        const pw = document.getElementById('pw-input').value;
-        const feedback = document.getElementById('login-feedback');
-        
-        try {
-            const res = await fetch('/api/notion?path=/users/me', { 
-                headers: { 'x-crm-password': pw } 
-            });
-            
-            if (res.ok) {
-                authCredential = pw;
-                localStorage.setItem('inuri_crm_auth', pw);
-                document.getElementById('login-screen').classList.add('off');
-                fetchData();
-            } else {
-                feedback.textContent = '비밀번호가 올바르지 않습니다. 다시 확인해주세요.';
-            }
-        } catch (err) {
-            feedback.textContent = '네트워크 연결 상태를 확인해주세요.';
-        }
-    }
+function parse(page) {
+  const p = page.properties;
+  const g = (k, t) => {
+    if (!p[k]) return '';
+    if (t === 'title') return p[k].title?.[0]?.plain_text || '';
+    if (t === 'rt') return p[k].rich_text?.map(x => x.plain_text).join('') || '';
+    if (t === 'sel') return p[k].select?.name || '';
+    if (t === 'num') return p[k].number ?? '';
+    if (t === 'date') return p[k].date?.start || '';
+    return '';
+  };
+  return {
+    id: page.id,
+    환자명: g('환자명', 'title'),
+    차트번호: g('차트번호', 'rt'),
+    처방종류: g('처방종류', 'sel'),
+    처방일수: g('처방일수', 'sel'),
+    처방차수: g('처방차수', 'num'),
+    한약수령일: g('한약수령일', 'date'),
+    상태: g('상태', 'sel'),
+    체질: g('체질', 'sel'),
+    메모: g('진료 메모', 'rt'),
+    CRM발송유형: g('CRM발송유형', 'sel'),
+    CRM초안: g('CRM초안', 'rt'),
+    발송상태: g('발송상태', 'sel')
+  };
+}
 
-    function processLogout() {
-        localStorage.removeItem('inuri_crm_auth');
-        location.reload();
-    }
-
-    // [API 통신 엔진]
-    async function requestNotion(path, method = 'GET', payload = null) {
-        const options = {
-            method,
-            headers: {
-                'Content-Type': 'application/json',
-                'x-crm-password': authCredential
-            }
-        };
-        if (payload) options.body = JSON.stringify(payload);
-
-        const response = await fetch(`/api/notion?path=${encodeURIComponent(path)}`, options);
-        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-        return response.json();
-    }
-
-    // [데이터 동기화]
-    async function fetchData() {
-        toggleLoader(true);
-        try {
-            const raw = await requestNotion(`/databases/${CONFIG.dbId}/query`, 'POST', { 
-                page_size: CONFIG.pageSize 
-            });
-            globalStore = raw.results.map(mapper);
-            updateDashboard();
-            document.getElementById('last-sync').textContent = `최근 동기화: ${new Date().toLocaleTimeString()}`;
-        } catch (err) {
-            triggerToast('데이터 동기화에 실패했습니다.', 'error');
-        } finally {
-            toggleLoader(false);
-        }
-    }
-
-    function mapper(page) {
-        const props = page.properties;
-        const extract = (name, type) => {
-            if (!props[name]) return '';
-            if (type === 'title') return props[name].title?.[0]?.plain_text || '';
-            if (type === 'text') return props[name].rich_text?.map(t => t.plain_text).join('') || '';
-            if (type === 'select') return props[name].select?.name || '';
-            return '';
-        };
-
-        return {
-            uuid: page.id,
-            name: extract('환자명', 'title'),
-            chart: extract('차트번호', 'text'),
-            memo: extract('진료메모요약', 'text'),
-            draft: extract('CRM초안', 'text'),
-            type: extract('CRM발송유형', 'select'),
-            status: extract('발송상태', 'select')
-        };
-    }
-
-    // [빠른 검색 및 전체 DB 조회]
-    async function quickSearch() {
-        const input = document.getElementById('chart-search-input');
-        const query = input.value.trim();
-        if (!query) return;
-
-        // 1단계: 현재 로드된 목록에서 검색
-        const localHit = globalStore.find(p => p.chart === query);
-        if (localHit) {
-            triggerToast(`${localHit.name}님은 이미 리스트에 존재합니다.`, 'success');
-            focusOnRow(localHit.uuid);
-            input.value = '';
-            return;
-        }
-
-        // 2단계: 노션 전체 서버에서 검색
-        triggerToast('노션 데이터베이스를 전체 검색 중입니다...', 'info');
-        try {
-            const result = await requestNotion(`/databases/${CONFIG.dbId}/query`, 'POST', {
-                filter: { property: '차트번호', rich_text: { equals: query } }
-            });
-
-            if (result.results.length > 0) {
-                const fetched = mapper(result.results[0]);
-                globalStore.push(fetched); // 하단에 추가
-                updateDashboard();
-                focusOnRow(fetched.uuid);
-                triggerToast('기존 환자 기록을 성공적으로 불러왔습니다.', 'success');
-            } else {
-                triggerToast('기존 기록이 없습니다. 신규 등록으로 이어집니다.', 'error');
-                openQuickAdd(query);
-            }
-        } catch (e) {
-            triggerToast('조회 중 통신 오류가 발생했습니다.', 'error');
-        }
-        input.value = '';
-    }
-
-    // [테이블 렌더링 로직]
-    function updateDashboard() {
-        const body = document.getElementById('data-body');
-        const dataSet = activeFilter === '전체' ? globalStore : globalStore.filter(p => p.type === activeFilter);
-        
-        body.innerHTML = dataSet.map((p, i) => `
-            <tr id="row-${p.uuid}">
-                <td style="font-size:11px; color:var(--ink-f)">${i+1}</td>
-                <td>
-                    <div style="font-weight:700; color:var(--accent); font-size:15px;">${safe(p.name)}</div>
-                    <div style="font-size:11px; color:var(--ink-m); margin-top:2px;">CHART. ${safe(p.chart)}</div>
-                </td>
-                <td>${buildMemoUI(p)}</td>
-                <td>
-                    <div class="draft-container">
-                        <div class="draft-preview" id="preview-${p.uuid}">${safe(p.draft || '내용이 없습니다.')}</div>
-                        <button class="expand-trigger" style="width:auto; padding:3px 10px; margin-top:8px;" onclick="toggleEditor('${p.uuid}')">✎ 기록 및 수정</button>
-                        <div class="edit-panel" id="editor-panel-${p.uuid}">
-                            <textarea id="textarea-${p.uuid}" class="draft-editor">${safe(p.draft)}</textarea>
-                            <div class="action-row">
-                                <button class="btn-save" onclick="saveDataUpdate('${p.uuid}')">노션에 기록 저장</button>
-                                <button class="btn-cancel" onclick="toggleEditor('${p.uuid}')">취소</button>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <select class="status-select ${p.status === '발송완료' ? 'done' : 'wait'}" onchange="updatePageStatus('${p.uuid}', this.value)">
-                        <option value="대기" ${p.status === '대기' ? 'selected' : ''}>⏳ 대기</option>
-                        <option value="검토완료" ${p.status === '검토완료' ? 'selected' : ''}>✅ 검토완료</option>
-                        <option value="발송완료" ${p.status === '발송완료' ? 'selected' : ''}>🚀 발송완료</option>
-                        <option value="보류" ${p.status === '보류' ? 'selected' : ''}>✋ 보류</option>
-                    </select>
-                </td>
-            </tr>
-        `).join('');
-
-        updateCounters();
-    }
-
-    function buildMemoUI(p) {
-        if (!p.memo) return '<span style="color:var(--ink-f)">상담 기록 없음</span>';
-        const lines = p.memo.split('\n').filter(l => l.trim() !== '');
-        const hasHistory = lines.length > 3;
-
-        return `
-            <div class="memo-wrapper">
-                <div id="memo-box-${p.uuid}" class="memo-scroll-area ${hasHistory ? 'has-history' : ''}">
-                    ${lines.map(line => {
-                        const dateTag = line.match(/^\[(.*?)\]/);
-                        if (dateTag) {
-                            return `<div class="memo-entry"><span class="memo-tag">${dateTag[0]}</span>${safe(line.replace(dateTag[0],''))}</div>`;
-                        }
-                        return `<div class="memo-entry">${safe(line)}</div>`;
-                    }).join('')}
-                </div>
-                ${hasHistory ? `<button class="expand-trigger" id="ebtn-${p.uuid}" onclick="toggleMemoView('${p.uuid}')">▼ 과거 기록 펼치기</button>` : ''}
+/* ── [JS] UI Rendering (메모 펼침/수정창 포함) ── */
+function renderTable() {
+  hide('load-st'); show('tbl-wrap');
+  const list = curFilter === '전체' ? patients : patients.filter(p => p.CRM발송유형 === curFilter);
+  const target = document.getElementById('tbody');
+  
+  target.innerHTML = list.map((p, i) => {
+    const memoLines = (p.메모 || '').split('\n');
+    const hasMore = memoLines.length > 4 || (p.메모 && p.메모.length > 100);
+    
+    return `
+    <tr id="row-${p.id}">
+      <td style="text-align:center; color:var(--ink-f); font-weight:700;">${i+1}</td>
+      <td>
+        <div style="font-weight:800; font-size:15px; margin-bottom:4px;">${esc(p.환자명)}</div>
+        <div style="font-size:12px; color:var(--ink-m);">${esc(p.차트번호)}</div>
+        <div style="margin-top:8px;">${p.체질 ? badge(p.체질, 'gr') : ''}</div>
+      </td>
+      <td>
+        <div style="margin-bottom:6px;">${badge(p.CRM발송유형 || '미정')}</div>
+        <div style="font-size:12px; color:var(--ink-m); line-height:1.4;">
+          ${esc(p.처방종류)}<br>
+          <span style="font-weight:700;">${esc(p.처방일수)}</span> (${esc(p.처방차수)}차)
+        </div>
+      </td>
+      <td>
+        <div class="memo-wrap-outer">
+          <div id="m-box-${p.id}" class="memo-box ${hasMore ? 'has-more' : ''}">
+            ${esc(p.메모 || '진료 기록이 없습니다.')}
+          </div>
+          ${hasMore ? `<button class="more-btn" onclick="toggleMemo('${p.id}')">▼ 과거 진료 기록 누적 보기</button>` : ''}
+        </div>
+      </td>
+      <td>
+        <div class="draft-wrap">
+          <div class="draft-text" id="view-dt-${p.id}">${esc(p.CRM초안 || '생성된 초안이 없습니다.')}</div>
+          <button class="edit-btn" onclick="toggleEp('${p.id}')" title="내용 수정">✎</button>
+          
+          <div class="ep" id="ep-${p.id}">
+            <div class="erow">
+              <div>
+                <label class="elabel">최종 발송용 문구 수정</label>
+                <textarea class="etxt" id="dt-${p.id}">${esc(p.CRM초안)}</textarea>
+              </div>
+              <div>
+                <label class="elabel" style="color:var(--warn)">수정 사유 (진료 메모에 자동 누적)</label>
+                <textarea class="etxt" id="rs-${p.id}" placeholder="예: 환자분의 최근 소화불량 호소 내용을 반영하여 문구 수정함."></textarea>
+              </div>
             </div>
-        `;
-    }
+            <div class="esave-wrap">
+              <span style="font-size:11px; color:var(--ink-f);">* 저장 시 노션의 초안과 진료 메모가 동시에 업데이트됩니다.</span>
+              <button class="esave" onclick="saveDraft('${p.id}')">💾 변경사항 저장</button>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="text-align:center;">
+        <label class="chk-wrap" style="justify-content:center; margin-bottom:10px;">
+          <input type="checkbox" ${p.발송상태 === '발송완료' ? 'checked' : ''} onchange="updateStat('${p.id}', this.checked ? '발송완료' : '대기')">
+          <span class="chk-label">${p.발송상태 === '발송완료' ? '발송완료' : '발송대기'}</span>
+        </label>
+        <button class="hsm" style="width:100%; font-size:11px;" onclick="copyDraft('${p.id}')">📋 복사하기</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
 
-    // [데이터 저장 - 최신순 누적]
-    async function saveDataUpdate(id) {
-        const patient = globalStore.find(p => p.uuid === id);
-        const newContent = document.getElementById(`textarea-${id}`).value.trim();
-        const dateStr = new Date().toISOString().split('T')[0];
-        
-        // 핵심 로직: [날짜] 내용 + 기존 기록
-        const entry = `[${dateStr}] ${newContent}`;
-        const mergedMemo = patient.memo ? entry + '\n' + patient.memo : entry;
+/* ── [JS] Helper & Action Functions (원본 복원) ── */
+async function saveDraft(id) {
+  const newDraft = document.getElementById('dt-' + id).value;
+  const reason = document.getElementById('rs-' + id).value;
+  const p = patients.find(x => x.id === id);
+  
+  if (!reason.trim()) {
+    toast('수정 사유를 간단히 입력해주세요.', 'err');
+    return;
+  }
 
-        try {
-            await requestNotion(`/pages/${id}`, 'PATCH', {
-                properties: {
-                    'CRM초안': { rich_text: [{ text: { content: newContent } }] },
-                    '진료메모요약': { rich_text: [{ text: { content: mergedMemo } }] }
-                }
-            });
-            patient.draft = newContent;
-            patient.memo = mergedMemo;
-            triggerToast('노션에 성공적으로 기록되었습니다.', 'success');
-            updateDashboard();
-        } catch (e) {
-            triggerToast('저장 중 오류가 발생했습니다.', 'error');
-        }
-    }
+  const today = new Date().toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' }).replace(/\. /g, '-').replace('.','');
+  const newMemo = `[${today} 수정] ${reason}\n${p.메모}`;
 
-    // [기타 UI 함수]
-    function toggleMemoView(id) {
-        const box = document.getElementById(`memo-box-${id}`);
-        const btn = document.getElementById(`ebtn-${id}`);
-        const isExp = box.classList.toggle('expanded');
-        btn.innerText = isExp ? '▲ 기록 접기' : '▼ 과거 기록 펼치기';
-    }
+  try {
+    await notion(`/pages/${id}`, 'PATCH', {
+      properties: {
+        'CRM초안': { rich_text: [{ text: { content: newDraft } }] },
+        '진료 메모': { rich_text: [{ text: { content: newMemo } }] }
+      }
+    });
+    p.CRM초안 = newDraft;
+    p.메모 = newMemo;
+    toast('노션에 성공적으로 반영되었습니다.', 'ok');
+    renderTable();
+  } catch(e) {
+    toast('저장 중 오류가 발생했습니다.', 'err');
+  }
+}
 
-    function toggleEditor(id) {
-        document.getElementById(`editor-panel-${id}`).classList.toggle('active');
-    }
+function toggleMemo(id) {
+  const box = document.getElementById('m-box-' + id);
+  box.classList.toggle('open');
+  const btn = box.nextElementSibling;
+  btn.innerText = box.classList.contains('open') ? '▲ 기록 닫기' : '▼ 과거 진료 기록 누적 보기';
+}
 
-    async function updatePageStatus(id, value) {
-        try {
-            await requestNotion(`/pages/${id}`, 'PATCH', {
-                properties: { '발송상태': { select: { name: value } } }
-            });
-            const p = globalStore.find(x => x.uuid === id);
-            if (p) p.status = value;
-            triggerToast(`상태가 [${value}]로 변경되었습니다.`, 'success');
-            updateDashboard();
-        } catch (e) {
-            triggerToast('상태 변경 실패', 'error');
-        }
-    }
+function toggleEp(id) {
+  const ep = document.getElementById('ep-' + id);
+  ep.classList.toggle('on');
+}
 
-    async function createNewPatient() {
-        const name = document.getElementById('new-name').value.trim();
-        const chart = document.getElementById('new-chart').value.trim();
-        const memo = document.getElementById('new-memo').value.trim();
+function badge(type, force) {
+  const m = {
+    '복약안내':'bg','중간점검':'bb','종료전안내':'bo','마무리상담':'bp','사후관리':'bgo',
+    '태양인':'bo','태음인':'bb','소양인':'bgo','소음인':'bg',
+  };
+  const cls = force === 'gr' ? 'bgr' : (m[type] || 'bgr');
+  return `<span class="badge ${cls}">${esc(type)}</span>`;
+}
 
-        if (!name) return triggerToast('환자 성함을 입력해주세요.', 'error');
+function updateCounts() {
+  const counts = { '전체': patients.length };
+  patients.forEach(p => {
+    if (p.CRM발송유형) counts[p.CRM발송유형] = (counts[p.CRM발송유형] || 0) + 1;
+  });
+  Object.keys(counts).forEach(k => {
+    const el = document.getElementById('c-' + k);
+    if (el) el.innerText = counts[k];
+  });
+  document.getElementById('qcnt').innerText = `미처리 업무: ${patients.filter(x => x.발송상태 !== '발송완료').length}건`;
+}
 
-        try {
-            const res = await requestNotion('/pages', 'POST', {
-                parent: { database_id: CONFIG.dbId },
-                properties: {
-                    '환자명': { title: [{ text: { content: name } }] },
-                    '차트번호': { rich_text: [{ text: { content: chart } }] },
-                    '진료메모요약': { rich_text: [{ text: { content: memo } }] },
-                    '발송상태': { select: { name: '대기' } }
-                }
-            });
-            globalStore.unshift(mapper(res));
-            updateDashboard();
-            hideModal('new-patient-modal');
-            triggerToast('신규 환자가 등록되었습니다.', 'success');
-        } catch (e) {
-            triggerToast('등록 중 오류 발생', 'error');
-        }
-    }
+async function updateStat(id, val) {
+  try {
+    await notion(`/pages/${id}`, 'PATCH', { properties: { '발송상태': { select: { name: val } } } });
+    const p = patients.find(x => x.id === id);
+    if (p) p.발송상태 = val;
+    updateCounts();
+    toast(`상태가 [${val}]로 변경되었습니다.`, 'ok');
+  } catch(e) { toast('상태 변경 실패', 'err'); }
+}
 
-    // [유틸리티]
-    function updateCounters() {
-        document.getElementById('cnt-all').textContent = globalStore.length;
-        const map = { '복약안내': 'cnt-med', '중간점검': 'cnt-mid', '종료전안내': 'cnt-end', '마무리상담': 'cnt-fin' };
-        Object.entries(map).forEach(([type, id]) => {
-            document.getElementById(id).textContent = globalStore.filter(p => p.type === type).length;
-        });
-    }
+async function notion(path, method, body) {
+  const res = await fetch(`https://api.notion.com/v1${path}`, {
+    method,
+    headers: {
+      'Authorization': `Bearer ${sessionPw}`,
+      'Notion-Version': '2022-06-28',
+      'Content-Type': 'application/json'
+    },
+    body: body ? JSON.stringify(body) : null
+  });
+  if (!res.ok) throw new Error('API Error');
+  return res.json();
+}
 
-    function applyFilter(f, el) {
-        activeFilter = f;
-        document.querySelectorAll('.filter-item').forEach(i => i.classList.remove('active'));
-        el.classList.add('active');
-        updateDashboard();
-    }
+function doLogin() {
+  const val = document.getElementById('pw-input').value;
+  if (!val) return;
+  sessionPw = val;
+  if (document.getElementById('remember-chk').checked) {
+    localStorage.setItem('crm_pw_hint', val);
+  }
+  document.getElementById('login-screen').classList.add('off');
+  load();
+}
 
-    function focusOnRow(id) {
-        setTimeout(() => {
-            const el = document.getElementById(`row-${id}`);
-            if (el) {
-                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                el.style.backgroundColor = 'var(--accent-l)';
-                setTimeout(() => el.style.backgroundColor = '', 2000);
-            }
-        }, 300);
-    }
+function logout() {
+  localStorage.removeItem('crm_pw_hint');
+  location.reload();
+}
 
-    function showModal(id) { document.getElementById(id).classList.add('active'); }
-    function hideModal(id) { document.getElementById(id).classList.remove('active'); }
-    function openQuickAdd(c) { document.getElementById('new-chart').value = c; showModal('new-patient-modal'); }
-    function toggleLoader(show) {
-        document.getElementById('loading-state').style.display = show ? 'block' : 'none';
-        document.getElementById('table-view').style.display = show ? 'none' : 'block';
-    }
+function togglePw() {
+  const input = document.getElementById('pw-input');
+  const eye = document.getElementById('pw-eye');
+  if (input.type === 'password') {
+    input.type = 'text'; eye.innerText = '🔒';
+  } else {
+    input.type = 'password'; eye.innerText = '👁';
+  }
+}
 
-    function triggerToast(msg, type) {
-        const t = document.getElementById('toast');
-        t.textContent = msg;
-        t.className = `visible ${type === 'success' ? 'success' : 'error'}`;
-        setTimeout(() => t.className = '', 3500);
-    }
+function toast(msg, type) {
+  const t = document.getElementById('toast');
+  t.innerText = msg;
+  t.className = 'on ' + type;
+  setTimeout(() => t.className = '', 3000);
+}
 
-    function safe(s) {
-        if (!s) return '';
-        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
+}
+
+function show(id) { document.getElementById(id).style.display = 'flex'; }
+function hide(id) { document.getElementById(id).style.display = 'none'; }
+function setF(f, el) {
+  curFilter = f;
+  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('ttitle').innerText = f + ' 리스트';
+  renderTable();
+}
+
+function copyDraft(id) {
+  const txt = document.getElementById('view-dt-' + id).innerText;
+  navigator.clipboard.writeText(txt).then(() => toast('클립보드에 복사되었습니다.', 'ok'));
+}
 </script>
 </body>
 </html>
