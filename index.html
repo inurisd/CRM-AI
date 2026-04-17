@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>아이누리 CRM 워크스페이스</title>
+<title>아이누리 CRM 워크스페이스 Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ── [SECTION 1] CSS Variables & Base Styles ── */
+/* ── [SECTION 1] CSS Variables: 브랜드 아이덴티티 ── */
 :root {
   --ink: #1a1714; --ink-m: #6b6560; --ink-f: #c5bfb9;
   --paper: #faf8f5; --warm: #f2ede6; --card: #ffffff;
@@ -21,83 +21,67 @@
   --r: 10px; --rs: 6px;
 }
 
+/* ── [SECTION 2] Reset & Base Layout ── */
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 body { font-family: 'Pretendard', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; font-size: 14px; line-height: 1.6; }
-main { padding: 20px 2.5% 100px; width: 95%; max-width: 1800px; margin: 0 auto; }
+main { padding: 20px 2.5% 100px; width: 95%; max-width: 1800px; margin: 0 auto; display: none; }
+main.on { display: block; }
 
-/* ── [SECTION 2] Login Screen ── */
-#login-screen { position: fixed; inset: 0; background: var(--paper); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-#login-screen.off { display: none; }
+/* ── [SECTION 3] Login Screen ── */
+#login-screen { position: fixed; inset: 0; background: var(--paper); display: flex; align-items: center; justify-content: center; z-index: 1000; transition: opacity 0.3s; }
+#login-screen.off { opacity: 0; pointer-events: none; }
 .login-box { background: var(--card); border-radius: 24px; padding: 56px 48px; max-width: 420px; width: 90%; box-shadow: var(--sh-lg); border: 1px solid var(--bd); text-align: center; }
 .login-logo { font-family: 'Nanum Myeongjo', serif; font-size: 32px; font-weight: 800; color: var(--accent); margin-bottom: 8px; letter-spacing: -0.02em; }
-.login-sub { font-size: 14px; color: var(--ink-m); margin-bottom: 40px; line-height: 1.6; font-weight: 400; }
+.login-sub { font-size: 14px; color: var(--ink-m); margin-bottom: 40px; line-height: 1.6; }
 .pw-wrap { position: relative; margin-bottom: 16px; }
 .pw-input { width: 100%; padding: 15px 16px; border: 2px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 16px; color: var(--ink); background: var(--paper); outline: none; transition: all .2s; text-align: center; letter-spacing: 0.1em; }
 .pw-input:focus { border-color: var(--accent-m); background: #fff; }
-.pw-toggle { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--ink-f); font-size: 18px; padding: 4px; }
-.login-btn { width: 100%; padding: 15px; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: background .2s; }
+.pw-toggle { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--ink-f); font-size: 18px; }
+.login-btn { width: 100%; padding: 15px; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); font-size: 16px; font-weight: 700; cursor: pointer; transition: background .2s; }
 .login-btn:hover { background: #1e4a36; }
-.login-error { font-size: 13px; color: var(--warn); margin-top: 12px; min-height: 20px; font-weight: 500; }
-.login-remember { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; cursor: pointer; }
-.login-remember input { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
-.login-remember span { font-size: 13px; color: var(--ink-m); }
+.login-remember { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; cursor: pointer; font-size: 13px; color: var(--ink-m); }
 
-/* ── [SECTION 3] Header & Navigation ── */
+/* ── [SECTION 4] Header & Navigation ── */
 header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 500; padding: 0 2.5%; }
 .brand { font-family: 'Nanum Myeongjo', serif; font-size: 18px; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 10px; }
 .bdot { width: 8px; height: 8px; background: var(--accent-m); border-radius: 50%; box-shadow: 0 0 8px var(--accent-m); }
 .hright { display: flex; align-items: center; gap: 12px; }
 .qbadge { background: var(--warn-l); color: var(--warn); font-size: 11px; font-weight: 800; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(196,92,38,0.2); }
-.hsm { padding: 8px 16px; background: var(--warm); border: 1px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 600; color: var(--ink-m); cursor: pointer; transition: all .2s; }
+.hsm { padding: 8px 16px; background: var(--warm); border: 1px solid var(--bd); border-radius: var(--rs); font-size: 13px; font-weight: 600; color: var(--ink-m); cursor: pointer; transition: all .2s; }
 .hsm:hover { background: var(--accent-l); color: var(--accent); border-color: var(--accent-m); }
-.hsm.ghost { background: transparent; border: none; }
 
 .fbar { background: var(--card); border-bottom: 1px solid var(--bd); display: flex; align-items: center; overflow-x: auto; padding: 0 2.5%; scrollbar-width: none; }
-.fbar::-webkit-scrollbar { display: none; }
-.ftab { padding: 16px 20px; font-size: 14px; font-weight: 600; color: var(--ink-m); cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; background: none; border: none; font-family: 'Pretendard', sans-serif; transition: all .2s; }
+.ftab { padding: 16px 20px; font-size: 14px; font-weight: 600; color: var(--ink-m); cursor: pointer; border: none; background: none; border-bottom: 3px solid transparent; transition: all .2s; white-space: nowrap; }
 .ftab.on { color: var(--accent); border-bottom-color: var(--accent); }
-.tcnt { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 6px; background: var(--warm); border-radius: 10px; font-size: 11px; font-weight: 700; margin-left: 6px; color: var(--ink-m); }
-.ftab.on .tcnt { background: var(--accent-l); color: var(--accent); }
+.tcnt { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 6px; background: var(--warm); border-radius: 10px; font-size: 11px; font-weight: 700; margin-left: 6px; }
 
-/* ── [SECTION 4] Main CRM Table ── */
-.thead { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+/* ── [SECTION 5] CRM Table & Components ── */
+.thead { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; margin-top: 20px; }
 .ttitle { font-family: 'Nanum Myeongjo', serif; font-size: 22px; font-weight: 800; color: var(--ink); }
-.tmeta { font-size: 13px; color: var(--ink-m); }
-
 .crm-tbl { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--card); border: 1px solid var(--bd); border-radius: var(--r); overflow: hidden; box-shadow: var(--sh); table-layout: fixed; }
-.crm-tbl thead tr { background: var(--warm); }
-.crm-tbl th { padding: 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-m); text-align: left; border-bottom: 1px solid var(--bd); }
-.crm-tbl tbody tr { border-bottom: 1px solid var(--bd); transition: background .15s; }
-.crm-tbl tbody tr:hover { background: #fdfcfa; }
+.crm-tbl th { padding: 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--ink-m); text-align: left; background: var(--warm); border-bottom: 1px solid var(--bd); }
 .crm-tbl td { padding: 18px 14px; vertical-align: top; border-bottom: 1px dotted var(--bd); }
-.crm-tbl tr:last-child td { border-bottom: none; }
 
-/* ── [SECTION 5] Memo & Draft Components ── */
+/* 진료 메모 박스 */
 .memo-wrap-outer { position: relative; }
-.memo-box { background: var(--warm); border-left: 3px solid var(--bd); border-radius: 0 var(--rs) var(--rs) 0; padding: 12px 14px; font-size: 13px; color: var(--ink-m); line-height: 1.7; white-space: pre-wrap; word-break: break-all; max-height: 5.2em; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+.memo-box { background: var(--warm); border-left: 3px solid var(--bd); border-radius: 0 var(--rs) var(--rs) 0; padding: 12px 14px; font-size: 13px; color: var(--ink-m); line-height: 1.7; white-space: pre-wrap; word-break: break-all; max-height: 6.8em; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 .memo-box.open { max-height: 2000px; background: #fff; border-color: var(--accent-m); }
-.memo-box:not(.open).has-more::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 30px; background: linear-gradient(transparent, var(--warm)); pointer-events: none; }
-.more-btn { display: block; width: 100%; padding: 6px; margin-top: 8px; background: var(--bd); border: none; border-radius: 4px; color: var(--ink-m); font-size: 11px; font-weight: 600; cursor: pointer; text-align: center; transition: all .2s; }
-.more-btn:hover { background: var(--ink-f); color: #fff; }
+.more-btn { display: block; width: 100%; padding: 6px; margin-top: 8px; background: var(--bd); border: none; border-radius: 4px; color: var(--ink-m); font-size: 11px; font-weight: 600; cursor: pointer; text-align: center; }
 
+/* 수정 패널 */
 .draft-wrap { position: relative; }
-.draft-text { font-size: 14px; line-height: 1.8; color: var(--ink); background: var(--card); border: 1.5px solid var(--bd); border-radius: var(--rs); padding: 14px 40px 14px 14px; white-space: pre-wrap; word-break: break-all; min-height: 100px; transition: border-color .2s; }
-.draft-wrap:hover .draft-text { border-color: var(--accent-m); }
-.edit-btn { position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; border: 1px solid var(--bd); border-radius: var(--rs); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink-m); opacity: 0; transition: all .2s; box-shadow: var(--sh); }
+.draft-text { font-size: 14px; line-height: 1.8; color: var(--ink); background: var(--card); border: 1.5px solid var(--bd); border-radius: var(--rs); padding: 14px; padding-right: 40px; white-space: pre-wrap; word-break: break-all; min-height: 100px; }
+.edit-btn { position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; border: 1px solid var(--bd); border-radius: var(--rs); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink-m); opacity: 0; transition: all .2s; }
 .draft-wrap:hover .edit-btn { opacity: 1; }
-.edit-btn:hover { color: var(--accent); border-color: var(--accent); }
 
-.ep { margin-top: 12px; padding: 16px; border: 1px solid var(--accent-m); background: #f9fdfb; border-radius: var(--rs); display: none; animation: slideDown 0.3s ease-out; }
-.ep.on { display: block; }
+.ep { margin-top: 12px; padding: 16px; border: 1px solid var(--accent-m); background: #f9fdfb; border-radius: var(--rs); display: none; }
+.ep.on { display: block; animation: slideDown 0.3s ease-out; }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 .erow { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.elabel { font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-m); margin-bottom: 8px; display: block; }
-.etxt { width: 100%; padding: 12px; background: #fff; border: 1.5px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 13px; color: var(--ink); resize: vertical; min-height: 140px; outline: none; line-height: 1.6; transition: border-color .2s; }
-.etxt:focus { border-color: var(--accent); }
-.esave-wrap { margin-top: 14px; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
-.esave { padding: 8px 20px; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .2s; }
+.elabel { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--ink-m); margin-bottom: 8px; display: block; }
+.etxt { width: 100%; padding: 12px; background: #fff; border: 1.5px solid var(--bd); border-radius: var(--rs); font-family: inherit; font-size: 13px; color: var(--ink); resize: vertical; min-height: 140px; outline: none; }
 
-/* ── [SECTION 6] Badges & Utilities ── */
+/* ── [SECTION 6] Badges & Add Bar ── */
 .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
 .bg { background: var(--accent-l); color: var(--accent); }
 .bo { background: var(--warn-l); color: var(--warn); }
@@ -106,18 +90,11 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 .bgo { background: var(--gold-l); color: var(--gold); }
 .bgr { background: var(--warm); color: var(--ink-m); }
 
-.chk-wrap { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
-.chk-wrap input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
-.chk-label { font-size: 12px; font-weight: 700; color: var(--ink-m); }
-
-/* ── [SECTION 7] Floating Bar & Toast ── */
 .add-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--bd); padding: 10px 2.5%; display: flex; align-items: center; gap: 14px; box-shadow: 0 -4px 20px rgba(26,23,20,.08); z-index: 600; height: 64px; }
-.chart-inp { padding: 10px 16px; border: 2px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 14px; font-weight: 600; width: 200px; outline: none; transition: border-color .2s; }
-.chart-inp:focus { border-color: var(--accent); }
-.btn-plus { width: 42px; height: 42px; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
-.btn-plus:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(45,106,79,0.3); }
+.chart-inp { padding: 10px 16px; border: 2px solid var(--bd); border-radius: var(--rs); font-size: 14px; font-weight: 600; width: 200px; outline: none; }
+.btn-plus { width: 42px; height: 42px; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-#toast { position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 40px; color: #fff; font-size: 14px; font-weight: 600; box-shadow: var(--sh-lg); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s; }
+#toast { position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 40px; color: #fff; font-size: 14px; font-weight: 600; z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s; }
 #toast.on { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(-10px); }
 #toast.ok { background: var(--accent); }
 #toast.err { background: var(--warn); }
@@ -125,12 +102,11 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 #load-st { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 0; }
 .spin { width: 40px; height: 40px; border: 4px solid var(--bd); border-top-color: var(--accent); border-radius: 50%; animation: rot 0.8s linear infinite; margin-bottom: 16px; }
 @keyframes rot { to { transform: rotate(360deg); } }
-
-#ai-input-section { margin-top: 40px; padding: 24px; background: var(--accent-l); border: 1px solid var(--accent-m); border-radius: var(--r); box-shadow: var(--sh); }
 </style>
 </head>
 <body>
 
+<!-- [LOGIN] -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">🌿 아이누리</div>
@@ -140,20 +116,21 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
       <button class="pw-toggle" onclick="togglePw()" id="pw-eye">👁</button>
     </div>
     <button class="login-btn" onclick="doLogin()">인증 후 입장</button>
-    <p class="login-error" id="login-err"></p>
     <label class="login-remember"><input type="checkbox" id="remember-chk" checked><span>로그인 상태 유지</span></label>
   </div>
 </div>
 
+<!-- [HEADER] -->
 <header>
-  <div class="brand"><div class="bdot"></div>아이누리 CRM <span style="font-weight:400; font-size:14px; margin-left:8px; color:var(--ink-f)">v2.5</span></div>
+  <div class="brand"><div class="bdot"></div>아이누리 CRM <span style="font-weight:400; font-size:14px; margin-left:8px; color:var(--ink-f)">v2.5 (Full)</span></div>
   <div class="hright">
-    <span class="qbadge" id="qcnt">데이터 확인 중...</span>
+    <span class="qbadge" id="qcnt">연결 확인 중...</span>
     <button class="hsm" onclick="load()">↺ 새로고침</button>
-    <button class="hsm ghost" onclick="logout()">로그아웃</button>
+    <button class="hsm" style="background:none; border:none;" onclick="logout()">로그아웃</button>
   </div>
 </header>
 
+<!-- [TABS] -->
 <div class="fbar">
   <button class="ftab on" onclick="setF('전체',this)">전체 <span class="tcnt" id="c-전체">0</span></button>
   <button class="ftab" onclick="setF('복약안내',this)">💊 복약안내 <span class="tcnt" id="c-복약안내">0</span></button>
@@ -162,16 +139,16 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
   <button class="ftab" onclick="setF('마무리상담',this)">🎯 마무리상담 <span class="tcnt" id="c-마무리상담">0</span></button>
 </div>
 
-<main>
+<!-- [MAIN] -->
+<main id="main-content">
   <div id="load-st">
     <div class="spin"></div>
-    <p style="color:var(--ink-m); font-weight:600;">노션 데이터베이스 연결 중...</p>
+    <p style="color:var(--ink-m); font-weight:600;">데이터 서버와 통신 중...</p>
   </div>
-  
+
   <div id="tbl-wrap" style="display:none">
     <div class="thead">
       <span class="ttitle" id="ttitle">전체 리스트</span>
-      <span class="tmeta" id="tmeta">오늘 처리할 환자 정보를 확인하세요.</span>
     </div>
     <table class="crm-tbl">
       <thead>
@@ -187,27 +164,14 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
       <tbody id="tbody"></tbody>
     </table>
   </div>
-
-  <div id="ai-input-section">
-    <h4 style="font-family: 'Nanum Myeongjo', serif; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-      🤖 AI 커맨드 센터 <span style="font-size: 12px; font-weight: 400; color: var(--ink-m); font-family: 'Pretendard';">| 정보 전달 및 분석 요청</span>
-    </h4>
-    <textarea id="ai-text-input" class="etxt" style="min-height: 100px; margin-bottom: 12px; border-color: var(--accent-m);" 
-              placeholder="AI에게 전달할 특이사항을 입력하거나, 분석할 파일 내용을 붙여넣으세요."></textarea>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div style="display: flex; gap: 8px; align-items: center;">
-        <input type="file" id="ai-file-input" style="font-size: 12px; color: var(--ink-m);">
-      </div>
-      <button class="esave" onclick="sendToAI()" style="background: var(--accent); padding: 10px 24px;">AI에게 데이터 전송</button>
-    </div>
-  </div>
 </main>
 
+<!-- [FOOTER] -->
 <div class="add-bar">
   <span style="font-size:13px; font-weight:800; color:var(--accent);">QUICK ADD</span>
   <input type="text" id="chart-q" class="chart-inp" placeholder="차트번호 입력" onkeydown="if(event.key==='Enter')addFromChart()">
   <button class="btn-plus" onclick="addFromChart()">+</button>
-  <div style="margin-left:auto; color:var(--ink-f); font-size:12px;">© i-nuri Network. Data Sovereignty Protected.</div>
+  <div style="margin-left:auto; color:var(--ink-f); font-size:12px;">© i-nuri Network. Proxy Protocol v2.</div>
 </div>
 
 <div id="toast"></div>
@@ -215,9 +179,6 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 <script>
 /* ── [JS] Config & State ── */
 const DB_ID = '04f406a5be9b454b9dda793fac2d4fb4';
-// [중요] 원장님의 n8n Webhook Production URL
-const N8N_WEBHOOK_URL = 'http://localhost:5678/webhook/ai-crm-update';
-
 let patients = [];
 let curFilter = '전체';
 let sessionPw = '';
@@ -228,33 +189,82 @@ window.onload = () => {
   if (saved) {
     sessionPw = saved;
     document.getElementById('login-screen').classList.add('off');
+    document.getElementById('main-content').classList.add('on');
     load();
   }
 };
 
-/* ── [JS] Core Logic ── */
+function togglePw() {
+  const inp = document.getElementById('pw-input');
+  const eye = document.getElementById('pw-eye');
+  if (inp.type === 'password') {
+    inp.type = 'text'; eye.innerText = '🔒';
+  } else {
+    inp.type = 'password'; eye.innerText = '👁';
+  }
+}
+
+function doLogin() {
+  const val = document.getElementById('pw-input').value;
+  if (!val) return;
+  sessionPw = val;
+  if (document.getElementById('remember-chk').checked) {
+    localStorage.setItem('crm_pw_hint', val);
+  }
+  document.getElementById('login-screen').classList.add('off');
+  document.getElementById('main-content').classList.add('on');
+  load();
+}
+
+function logout() {
+  localStorage.removeItem('crm_pw_hint');
+  location.reload();
+}
+
+/* ── [JS] Core Data Engine (Vercel Proxy) ── */
+async function notion(path, method, body) {
+  // CORS 해결을 위해 /api/notion 엔드포인트로 모든 요청을 프록시합니다.
+  const res = await fetch('/api/notion', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      path: path,
+      method: method,
+      token: sessionPw,
+      body: body
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    console.error('Proxy Error:', err);
+    throw new Error('API 연결 실패');
+  }
+  return res.json();
+}
+
 async function load() {
   show('load-st'); hide('tbl-wrap');
   try {
     const res = await notion(`/databases/${DB_ID}/query`, 'POST', {
       sorts: [{ property: '한약수령일', direction: 'descending' }]
     });
-    patients = res.results.map(parse);
+    patients = res.results.map(parsePage);
     renderTable();
     updateCounts();
   } catch (e) {
-    toast('데이터를 불러오지 못했습니다.', 'err');
+    toast('데이터 연동에 실패했습니다. API Key를 확인하세요.', 'err');
   }
 }
 
-function parse(page) {
+function parsePage(page) {
   const p = page.properties;
   const g = (k, t) => {
     if (!p[k]) return '';
     if (t === 'title') return p[k].title?.[0]?.plain_text || '';
     if (t === 'rt') return p[k].rich_text?.map(x => x.plain_text).join('') || '';
     if (t === 'sel') return p[k].select?.name || '';
-    if (t === 'num') return p[k].number ?? '';
+    if (t === 'num') return p[k].number ?? 0;
     if (t === 'date') return p[k].date?.start || '';
     return '';
   };
@@ -265,26 +275,30 @@ function parse(page) {
     처방종류: g('처방종류', 'sel'),
     처방일수: g('처방일수', 'sel'),
     처방차수: g('처방차수', 'num'),
-    한약수령일: g('한약수령일', 'date'),
-    상태: g('상태', 'sel'),
     체질: g('체질', 'sel'),
     메모: g('진료 메모', 'rt'),
-    CRM발송유형: g('CRM발송유형', 'sel'),
-    CRM초안: g('CRM초안', 'rt'),
-    발송상태: g('발송상태', 'sel')
+    유형: g('CRM발송유형', 'sel'),
+    초안: g('CRM초안', 'rt'),
+    상태: g('발송상태', 'sel')
   };
 }
 
-/* ── [JS] UI Rendering (메모 펼침/수정창 포함)  ── */
+/* ── [JS] UI Rendering & Actions ── */
+function setF(f, btn) {
+  curFilter = f;
+  document.querySelectorAll('.ftab').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('ttitle').innerText = f + ' 리스트';
+  renderTable();
+}
+
 function renderTable() {
   hide('load-st'); show('tbl-wrap');
-  const list = curFilter === '전체' ? patients : patients.filter(p => p.CRM발송유형 === curFilter);
+  const list = curFilter === '전체' ? patients : patients.filter(p => p.유형 === curFilter);
   const target = document.getElementById('tbody');
-  
+
   target.innerHTML = list.map((p, i) => {
-    const memoLines = (p.메모 || '').split('\n');
-    const hasMore = memoLines.length > 4 || (p.메모 && p.메모.length > 100);
-    
+    const hasMore = (p.메모 || '').length > 100 || (p.메모 || '').split('\n').length > 4;
     return `
     <tr id="row-${p.id}">
       <td style="text-align:center; color:var(--ink-f); font-weight:700;">${i+1}</td>
@@ -294,15 +308,15 @@ function renderTable() {
         <div style="margin-top:8px;">${p.체질 ? badge(p.체질, 'gr') : ''}</div>
       </td>
       <td>
-        <div style="margin-bottom:6px;">${badge(p.CRM발송유형 || '미정')}</div>
+        <div style="margin-bottom:6px;">${badge(p.유형 || '미정')}</div>
         <div style="font-size:12px; color:var(--ink-m); line-height:1.4;">
           ${esc(p.처방종류)}<br>
-          <span style="font-weight:700;">${esc(p.처방일수)}</span> (${esc(p.처방차수)}차)
+          <span style="font-weight:700;">${esc(p.처방일수)}</span> (${p.처방차수}차)
         </div>
       </td>
       <td>
         <div class="memo-wrap-outer">
-          <div id="m-box-${p.id}" class="memo-box ${hasMore ? 'has-more' : ''}">
+          <div id="m-box-${p.id}" class="memo-box">
             ${esc(p.메모 || '진료 기록이 없습니다.')}
           </div>
           ${hasMore ? `<button class="more-btn" onclick="toggleMemo('${p.id}')">▼ 과거 진료 기록 누적 보기</button>` : ''}
@@ -310,100 +324,49 @@ function renderTable() {
       </td>
       <td>
         <div class="draft-wrap">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-            <button class="hsm" style="font-size: 11px; background: var(--accent-l); color: var(--accent);" 
-              onclick="generateAI('${p.id}')">✨ AI 초안 생성</button>
-          </div>
-          <div class="draft-text" id="view-dt-${p.id}">${esc(p.CRM초안 || '생성된 초안이 없습니다.')}</div>
-          <button class="edit-btn" onclick="toggleEp('${p.id}')" title="내용 수정">✎</button>
+          <div class="draft-text" id="view-dt-${p.id}">${esc(p.초안 || '생성된 초안이 없습니다.')}</div>
+          <button class="edit-btn" onclick="toggleEp('${p.id}')">✎</button>
           
           <div class="ep" id="ep-${p.id}">
             <div class="erow">
               <div>
                 <label class="elabel">최종 발송용 문구 수정</label>
-                <textarea class="etxt" id="dt-${p.id}">${esc(p.CRM초안)}</textarea>
+                <textarea class="etxt" id="dt-${p.id}">${esc(p.초안)}</textarea>
               </div>
               <div>
                 <label class="elabel" style="color:var(--warn)">수정 사유 (진료 메모에 자동 누적)</label>
-                <textarea class="etxt" id="rs-${p.id}" placeholder="수정 사유 입력"></textarea>
+                <textarea class="etxt" id="rs-${p.id}" placeholder="예: 소화불량 호소 내용을 반영하여 문구 수정함."></textarea>
               </div>
             </div>
-            <div class="esave-wrap">
-              <button class="esave" onclick="saveDraft('${p.id}')">💾 변경사항 저장</button>
+            <div style="margin-top:14px; display:flex; justify-content:flex-end; align-items:center; gap:12px;">
+              <span style="font-size:11px; color:var(--ink-f);">* 노션의 초안과 메모가 동시 업데이트됩니다.</span>
+              <button class="hsm" style="background:var(--accent); color:#fff;" onclick="saveDraft('${p.id}')">💾 변경사항 저장</button>
             </div>
           </div>
         </div>
       </td>
       <td style="text-align:center;">
-        <label class="chk-wrap" style="justify-content:center; margin-bottom:10px;">
-          <input type="checkbox" ${p.발송상태 === '발송완료' ? 'checked' : ''} onchange="updateStat('${p.id}', this.checked ? '발송완료' : '대기')">
-          <span class="chk-label">발송여부</span>
-        </label>
+        <select onchange="updateStat('${p.id}', this.value)" style="padding:6px; width:100%; border:1px solid var(--bd); border-radius:4px; font-size:12px; margin-bottom:8px;">
+          <option value="대기" ${p.상태==='대기'?'selected':''}>발송대기</option>
+          <option value="발송완료" ${p.상태==='발송완료'?'selected':''}>발송완료</option>
+          <option value="보류" ${p.상태==='보류'?'selected':''}>보류</option>
+        </select>
         <button class="hsm" style="width:100%; font-size:11px;" onclick="copyDraft('${p.id}')">📋 복사하기</button>
       </td>
     </tr>`;
   }).join('');
 }
 
-/* ── [JS] Actions & AI Functions ── */
-async function sendToAI() {
-  const text = document.getElementById('ai-text-input').value;
-  const fileInput = document.getElementById('ai-file-input');
-  if (!text.trim() && !fileInput.files[0]) {
-    toast('내용이나 파일을 선택하세요.', 'err');
-    return;
-  }
-  const btn = event.target;
-  btn.disabled = true; btn.innerText = '⏳ 전송 중...';
-
-  try {
-    const res = await fetch(N8N_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'AI_INPUT',
-        content: text,
-        fileName: fileInput.files[0] ? fileInput.files[0].name : null,
-      })
-    });
-    if (res.ok) {
-      toast('AI에게 전송되었습니다.', 'ok');
-      document.getElementById('ai-text-input').value = '';
-    } else throw new Error();
-  } catch (e) {
-    toast('전송 실패. 서버를 확인하세요.', 'err');
-  } finally {
-    btn.disabled = false; btn.innerText = 'AI에게 데이터 전송';
-  }
-}
-
-async function generateAI(id) {
-  const p = patients.find(x => x.id === id);
-  toast(`${p.환자명}님 초안 생성 시작...`, 'ok');
-  try {
-    const res = await fetch(N8N_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'GENERATE',
-        pageId: id,
-        patientData: p 
-      })
-    });
-    if (res.ok) {
-      toast('AI 초안이 생성되었습니다.', 'ok');
-      setTimeout(() => load(), 2000);
-    } else throw new Error();
-  } catch (e) {
-    toast('초안 생성 중 오류 발생', 'err');
-  }
-}
-
+/* ── [JS] Logic Helpers ── */
 async function saveDraft(id) {
   const newDraft = document.getElementById('dt-' + id).value;
   const reason = document.getElementById('rs-' + id).value;
   const p = patients.find(x => x.id === id);
-  if (!reason.trim()) { toast('수정 사유를 입력하세요.', 'err'); return; }
+
+  if (!reason.trim()) {
+    toast('수정 사유를 간단히 입력해주세요.', 'err');
+    return;
+  }
 
   const today = new Date().toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' }).replace(/\. /g, '-').replace('.','');
   const newMemo = `[${today} 수정] ${reason}\n${p.메모}`;
@@ -415,79 +378,66 @@ async function saveDraft(id) {
         '진료 메모': { rich_text: [{ text: { content: newMemo } }] }
       }
     });
-    p.CRM초안 = newDraft; p.메모 = newMemo;
-    toast('노션에 저장되었습니다.', 'ok');
+    p.초안 = newDraft;
+    p.메모 = newMemo;
+    toast('노션에 성공적으로 반영되었습니다.', 'ok');
     renderTable();
-  } catch(e) { toast('저장 실패', 'err'); }
+  } catch(e) { toast('저장 중 오류 발생', 'err'); }
 }
 
-async function notion(path, method, body) {
-  const res = await fetch('/api/notion', { 
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ path, method, token: sessionPw, body })
-  });
-  if (!res.ok) throw new Error('API 연결 실패');
-  return res.json();
-}
-
-/* ── [JS] Helpers ── */
-function toggleMemo(id) {
-  const box = document.getElementById('m-box-' + id);
-  box.classList.toggle('open');
-  box.nextElementSibling.innerText = box.classList.contains('open') ? '▲ 기록 닫기' : '▼ 과거 진료 기록 누적 보기';
-}
-function toggleEp(id) { document.getElementById('ep-' + id).classList.toggle('on'); }
-function badge(type, force) {
-  const m = { '복약안내':'bg','중간점검':'bb','종료전안내':'bo','마무리상담':'bp','태양인':'bo','태음인':'bb','소양인':'bgo','소음인':'bg' };
-  return `<span class="badge ${force === 'gr' ? 'bgr' : (m[type] || 'bgr')}">${esc(type)}</span>`;
-}
-function updateCounts() {
-  const counts = { '전체': patients.length };
-  patients.forEach(p => { if (p.CRM발송유형) counts[p.CRM발송유형] = (counts[p.CRM발송유형] || 0) + 1; });
-  Object.keys(counts).forEach(k => { if(document.getElementById('c-'+k)) document.getElementById('c-'+k).innerText = counts[k]; });
-  document.getElementById('qcnt').innerText = `미처리: ${patients.filter(x => x.발송상태 !== '발송완료').length}건`;
-}
 async function updateStat(id, val) {
   try {
     await notion(`/pages/${id}`, 'PATCH', { properties: { '발송상태': { select: { name: val } } } });
     const p = patients.find(x => x.id === id);
-    if (p) p.발송상태 = val;
+    if (p) p.상태 = val;
     updateCounts();
     toast(`상태 변경: ${val}`, 'ok');
-  } catch(e) { toast('실패', 'err'); }
+  } catch(e) { toast('변경 실패', 'err'); }
 }
-function doLogin() {
-  sessionPw = document.getElementById('pw-input').value;
-  if (!sessionPw) return;
-  if (document.getElementById('remember-chk').checked) localStorage.setItem('crm_pw_hint', sessionPw);
-  document.getElementById('login-screen').classList.add('off');
-  load();
-}
-function logout() { localStorage.removeItem('crm_pw_hint'); location.reload(); }
-function togglePw() {
-  const input = document.getElementById('pw-input');
-  input.type = input.type === 'password' ? 'text' : 'password';
-  document.getElementById('pw-eye').innerText = input.type === 'password' ? '👁' : '🔒';
-}
-function toast(msg, type) {
-  const t = document.getElementById('toast');
-  t.innerText = msg; t.className = 'on ' + type;
-  setTimeout(() => t.className = '', 3000);
-}
-function esc(str) { return !str ? '' : String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])); }
-function show(id) { document.getElementById(id).style.display = 'flex'; }
-function hide(id) { document.getElementById(id).style.display = 'none'; }
-function setF(f, el) {
-  curFilter = f;
-  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('on'));
-  el.classList.add('on');
-  document.getElementById('ttitle').innerText = f + ' 리스트';
-  renderTable();
-}
+
 function copyDraft(id) {
-  navigator.clipboard.writeText(document.getElementById('view-dt-' + id).innerText)
-    .then(() => toast('복사되었습니다.', 'ok'));
+  const txt = document.getElementById('view-dt-' + id).innerText;
+  const el = document.createElement('textarea');
+  el.value = txt; document.body.appendChild(el);
+  el.select(); document.execCommand('copy');
+  document.body.removeChild(el);
+  toast('클립보드에 복사되었습니다.', 'ok');
+}
+
+function toggleMemo(id) {
+  const box = document.getElementById('m-box-' + id);
+  box.classList.toggle('open');
+  const btn = box.nextElementSibling;
+  btn.innerText = box.classList.contains('open') ? '▲ 기록 닫기' : '▼ 과거 진료 기록 누적 보기';
+}
+
+function toggleEp(id) {
+  const ep = document.getElementById('ep-' + id);
+  ep.classList.toggle('on');
+}
+
+function updateCounts() {
+  const counts = { '전체': patients.length };
+  patients.forEach(p => { if (p.유형) counts[p.유형] = (counts[p.유형] || 0) + 1; });
+  Object.keys(counts).forEach(k => {
+    const el = document.getElementById('c-' + k);
+    if (el) el.innerText = counts[k];
+  });
+  document.getElementById('qcnt').innerText = `미처리: ${patients.filter(x => x.상태 !== '발송완료').length}건`;
+}
+
+function badge(type, force) {
+  const m = { '복약안내':'bg','중간점검':'bb','종료전안내':'bo','마무리상담':'bp','태양인':'bo','태음인':'bb','소양인':'bgo','소음인':'bg' };
+  return `<span class="badge ${force === 'gr' ? 'bgr' : (m[type] || 'bgr')}">${esc(type)}</span>`;
+}
+
+function show(id) { document.getElementById(id).style.display = 'block'; }
+function hide(id) { document.getElementById(id).style.display = 'none'; }
+function esc(s) { return s ? s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])) : ''; }
+function toast(m, s) { 
+  const t = document.getElementById('toast'); 
+  t.innerText = m; t.className = 'on ' + s; 
+  setTimeout(() => t.className = '', 3000); 
 }
 </script>
 </body>
