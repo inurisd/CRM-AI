@@ -6,7 +6,7 @@
 <title>아이누리 CRM 워크스페이스</title>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ── [SECTION 1] CSS Variables & Base Styles (원본 복원) ── */
+/* ── [SECTION 1] CSS Variables & Base Styles ── */
 :root {
   --ink: #1a1714; --ink-m: #6b6560; --ink-f: #c5bfb9;
   --paper: #faf8f5; --warm: #f2ede6; --card: #ffffff;
@@ -25,7 +25,7 @@
 body { font-family: 'Pretendard', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; font-size: 14px; line-height: 1.6; }
 main { padding: 20px 2.5% 100px; width: 95%; max-width: 1800px; margin: 0 auto; }
 
-/* ── [SECTION 2] Login Screen (상세 스타일 복원) ── */
+/* ── [SECTION 2] Login Screen ── */
 #login-screen { position: fixed; inset: 0; background: var(--paper); display: flex; align-items: center; justify-content: center; z-index: 1000; }
 #login-screen.off { display: none; }
 .login-box { background: var(--card); border-radius: 24px; padding: 56px 48px; max-width: 420px; width: 90%; box-shadow: var(--sh-lg); border: 1px solid var(--bd); text-align: center; }
@@ -42,7 +42,7 @@ main { padding: 20px 2.5% 100px; width: 95%; max-width: 1800px; margin: 0 auto; 
 .login-remember input { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
 .login-remember span { font-size: 13px; color: var(--ink-m); }
 
-/* ── [SECTION 3] Header & Navigation (원본 복원) ── */
+/* ── [SECTION 3] Header & Navigation ── */
 header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 500; padding: 0 2.5%; }
 .brand { font-family: 'Nanum Myeongjo', serif; font-size: 18px; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 10px; }
 .bdot { width: 8px; height: 8px; background: var(--accent-m); border-radius: 50%; box-shadow: 0 0 8px var(--accent-m); }
@@ -54,12 +54,12 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 
 .fbar { background: var(--card); border-bottom: 1px solid var(--bd); display: flex; align-items: center; overflow-x: auto; padding: 0 2.5%; scrollbar-width: none; }
 .fbar::-webkit-scrollbar { display: none; }
-.ftab { padding: 16px 20px; font-size: 14px; font-weight: 600; color: var(--ink-m); cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; background: none; border-left: none; border-right: none; border-top: none; font-family: 'Pretendard', sans-serif; transition: all .2s; }
+.ftab { padding: 16px 20px; font-size: 14px; font-weight: 600; color: var(--ink-m); cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; background: none; border: none; font-family: 'Pretendard', sans-serif; transition: all .2s; }
 .ftab.on { color: var(--accent); border-bottom-color: var(--accent); }
 .tcnt { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 6px; background: var(--warm); border-radius: 10px; font-size: 11px; font-weight: 700; margin-left: 6px; color: var(--ink-m); }
 .ftab.on .tcnt { background: var(--accent-l); color: var(--accent); }
 
-/* ── [SECTION 4] Main CRM Table (원본 디테일) ── */
+/* ── [SECTION 4] Main CRM Table ── */
 .thead { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; }
 .ttitle { font-family: 'Nanum Myeongjo', serif; font-size: 22px; font-weight: 800; color: var(--ink); }
 .tmeta { font-size: 13px; color: var(--ink-m); }
@@ -72,7 +72,7 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 .crm-tbl td { padding: 18px 14px; vertical-align: top; border-bottom: 1px dotted var(--bd); }
 .crm-tbl tr:last-child td { border-bottom: none; }
 
-/* ── [SECTION 5] New Components (메모 & 수정창) ── */
+/* ── [SECTION 5] Memo & Draft Components ── */
 .memo-wrap-outer { position: relative; }
 .memo-box { background: var(--warm); border-left: 3px solid var(--bd); border-radius: 0 var(--rs) var(--rs) 0; padding: 12px 14px; font-size: 13px; color: var(--ink-m); line-height: 1.7; white-space: pre-wrap; word-break: break-all; max-height: 5.2em; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
 .memo-box.open { max-height: 2000px; background: #fff; border-color: var(--accent-m); }
@@ -97,7 +97,7 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 .esave-wrap { margin-top: 14px; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
 .esave { padding: 8px 20px; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .2s; }
 
-/* ── [SECTION 6] Badges & Utilities (원본 복원) ── */
+/* ── [SECTION 6] Badges & Utilities ── */
 .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
 .bg { background: var(--accent-l); color: var(--accent); }
 .bo { background: var(--warn-l); color: var(--warn); }
@@ -110,7 +110,7 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 .chk-wrap input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
 .chk-label { font-size: 12px; font-weight: 700; color: var(--ink-m); }
 
-/* ── [SECTION 7] Floating Bar & Modal (원본 복원) ── */
+/* ── [SECTION 7] Floating Bar & Toast ── */
 .add-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--bd); padding: 10px 2.5%; display: flex; align-items: center; gap: 14px; box-shadow: 0 -4px 20px rgba(26,23,20,.08); z-index: 600; height: 64px; }
 .chart-inp { padding: 10px 16px; border: 2px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 14px; font-weight: 600; width: 200px; outline: none; transition: border-color .2s; }
 .chart-inp:focus { border-color: var(--accent); }
@@ -122,10 +122,11 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 #toast.ok { background: var(--accent); }
 #toast.err { background: var(--warn); }
 
-/* ── [SECTION 8] Loading Spinner ── */
 #load-st { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 0; }
 .spin { width: 40px; height: 40px; border: 4px solid var(--bd); border-top-color: var(--accent); border-radius: 50%; animation: rot 0.8s linear infinite; margin-bottom: 16px; }
 @keyframes rot { to { transform: rotate(360deg); } }
+
+#ai-input-section { margin-top: 40px; padding: 24px; background: var(--accent-l); border: 1px solid var(--accent-m); border-radius: var(--r); box-shadow: var(--sh); }
 </style>
 </head>
 <body>
@@ -183,21 +184,25 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
           <th style="width:140px; text-align:center">상태 관리</th>
         </tr>
       </thead>
-      <tbody id="tbody">
-        </tbody>
+      <tbody id="tbody"></tbody>
     </table>
+  </div>
+
+  <div id="ai-input-section">
+    <h4 style="font-family: 'Nanum Myeongjo', serif; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+      🤖 AI 커맨드 센터 <span style="font-size: 12px; font-weight: 400; color: var(--ink-m); font-family: 'Pretendard';">| 정보 전달 및 분석 요청</span>
+    </h4>
+    <textarea id="ai-text-input" class="etxt" style="min-height: 100px; margin-bottom: 12px; border-color: var(--accent-m);" 
+              placeholder="AI에게 전달할 특이사항을 입력하거나, 분석할 파일 내용을 붙여넣으세요."></textarea>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <input type="file" id="ai-file-input" style="font-size: 12px; color: var(--ink-m);">
+      </div>
+      <button class="esave" onclick="sendToAI()" style="background: var(--accent); padding: 10px 24px;">AI에게 데이터 전송</button>
+    </div>
   </div>
 </main>
 
-<div class="ai-input-section" style="padding: 20px; background: var(--accent-l); margin-bottom: 20px; border-radius: var(--r);">
-  <h4 style="color: var(--accent); margin-bottom: 10px;">🤖 AI에게 정보 전달</h4>
-  <textarea id="ai-text-input" class="etxt" style="min-height: 80px;" placeholder="환자 특이사항이나 파일 내용을 입력하고 AI에게 전달하세요."></textarea>
-  <div style="margin-top: 10px; display: flex; gap: 10px;">
-    <input type="file" id="ai-file-input" style="font-size: 12px;">
-    <button class="esave" onclick="sendToAI()">AI에게 전달하기</button>
-  </div>
-</div>
-  
 <div class="add-bar">
   <span style="font-size:13px; font-weight:800; color:var(--accent);">QUICK ADD</span>
   <input type="text" id="chart-q" class="chart-inp" placeholder="차트번호 입력" onkeydown="if(event.key==='Enter')addFromChart()">
@@ -209,7 +214,10 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 
 <script>
 /* ── [JS] Config & State ── */
-const DB_ID = '04f406a5be9b454b9dda793fac2d4fb4'; // 원본 DB ID 유지
+const DB_ID = '04f406a5be9b454b9dda793fac2d4fb4';
+// [중요] 원장님의 n8n Webhook Production URL
+const N8N_WEBHOOK_URL = 'http://localhost:5678/webhook/ai-crm-update';
+
 let patients = [];
 let curFilter = '전체';
 let sessionPw = '';
@@ -224,7 +232,7 @@ window.onload = () => {
   }
 };
 
-/* ── [JS] Core Logic (원본 복원) ── */
+/* ── [JS] Core Logic ── */
 async function load() {
   show('load-st'); hide('tbl-wrap');
   try {
@@ -267,7 +275,7 @@ function parse(page) {
   };
 }
 
-/* ── [JS] UI Rendering (메모 펼침/수정창 포함) ── */
+/* ── [JS] UI Rendering (메모 펼침/수정창 포함)  ── */
 function renderTable() {
   hide('load-st'); show('tbl-wrap');
   const list = curFilter === '전체' ? patients : patients.filter(p => p.CRM발송유형 === curFilter);
@@ -317,11 +325,10 @@ function renderTable() {
               </div>
               <div>
                 <label class="elabel" style="color:var(--warn)">수정 사유 (진료 메모에 자동 누적)</label>
-                <textarea class="etxt" id="rs-${p.id}" placeholder="예: 환자분의 최근 소화불량 호소 내용을 반영하여 문구 수정함."></textarea>
+                <textarea class="etxt" id="rs-${p.id}" placeholder="수정 사유 입력"></textarea>
               </div>
             </div>
             <div class="esave-wrap">
-              <span style="font-size:11px; color:var(--ink-f);">* 저장 시 노션의 초안과 진료 메모가 동시에 업데이트됩니다.</span>
               <button class="esave" onclick="saveDraft('${p.id}')">💾 변경사항 저장</button>
             </div>
           </div>
@@ -330,7 +337,7 @@ function renderTable() {
       <td style="text-align:center;">
         <label class="chk-wrap" style="justify-content:center; margin-bottom:10px;">
           <input type="checkbox" ${p.발송상태 === '발송완료' ? 'checked' : ''} onchange="updateStat('${p.id}', this.checked ? '발송완료' : '대기')">
-          <span class="chk-label">${p.발송상태 === '발송완료' ? '발송완료' : '발송대기'}</span>
+          <span class="chk-label">발송여부</span>
         </label>
         <button class="hsm" style="width:100%; font-size:11px;" onclick="copyDraft('${p.id}')">📋 복사하기</button>
       </td>
@@ -338,16 +345,65 @@ function renderTable() {
   }).join('');
 }
 
-/* ── [JS] Helper & Action Functions (원본 복원) ── */
+/* ── [JS] Actions & AI Functions ── */
+async function sendToAI() {
+  const text = document.getElementById('ai-text-input').value;
+  const fileInput = document.getElementById('ai-file-input');
+  if (!text.trim() && !fileInput.files[0]) {
+    toast('내용이나 파일을 선택하세요.', 'err');
+    return;
+  }
+  const btn = event.target;
+  btn.disabled = true; btn.innerText = '⏳ 전송 중...';
+
+  try {
+    const res = await fetch(N8N_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'AI_INPUT',
+        content: text,
+        fileName: fileInput.files[0] ? fileInput.files[0].name : null,
+      })
+    });
+    if (res.ok) {
+      toast('AI에게 전송되었습니다.', 'ok');
+      document.getElementById('ai-text-input').value = '';
+    } else throw new Error();
+  } catch (e) {
+    toast('전송 실패. 서버를 확인하세요.', 'err');
+  } finally {
+    btn.disabled = false; btn.innerText = 'AI에게 데이터 전송';
+  }
+}
+
+async function generateAI(id) {
+  const p = patients.find(x => x.id === id);
+  toast(`${p.환자명}님 초안 생성 시작...`, 'ok');
+  try {
+    const res = await fetch(N8N_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'GENERATE',
+        pageId: id,
+        patientData: p 
+      })
+    });
+    if (res.ok) {
+      toast('AI 초안이 생성되었습니다.', 'ok');
+      setTimeout(() => load(), 2000);
+    } else throw new Error();
+  } catch (e) {
+    toast('초안 생성 중 오류 발생', 'err');
+  }
+}
+
 async function saveDraft(id) {
   const newDraft = document.getElementById('dt-' + id).value;
   const reason = document.getElementById('rs-' + id).value;
   const p = patients.find(x => x.id === id);
-  
-  if (!reason.trim()) {
-    toast('수정 사유를 간단히 입력해주세요.', 'err');
-    return;
-  }
+  if (!reason.trim()) { toast('수정 사유를 입력하세요.', 'err'); return; }
 
   const today = new Date().toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' }).replace(/\. /g, '-').replace('.','');
   const newMemo = `[${today} 수정] ${reason}\n${p.메모}`;
@@ -359,122 +415,67 @@ async function saveDraft(id) {
         '진료 메모': { rich_text: [{ text: { content: newMemo } }] }
       }
     });
-    p.CRM초안 = newDraft;
-    p.메모 = newMemo;
-    toast('노션에 성공적으로 반영되었습니다.', 'ok');
+    p.CRM초안 = newDraft; p.메모 = newMemo;
+    toast('노션에 저장되었습니다.', 'ok');
     renderTable();
-  } catch(e) {
-    toast('저장 중 오류가 발생했습니다.', 'err');
-  }
+  } catch(e) { toast('저장 실패', 'err'); }
 }
 
+async function notion(path, method, body) {
+  const res = await fetch('/api/notion', { 
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ path, method, token: sessionPw, body })
+  });
+  if (!res.ok) throw new Error('API 연결 실패');
+  return res.json();
+}
+
+/* ── [JS] Helpers ── */
 function toggleMemo(id) {
   const box = document.getElementById('m-box-' + id);
   box.classList.toggle('open');
-  const btn = box.nextElementSibling;
-  btn.innerText = box.classList.contains('open') ? '▲ 기록 닫기' : '▼ 과거 진료 기록 누적 보기';
+  box.nextElementSibling.innerText = box.classList.contains('open') ? '▲ 기록 닫기' : '▼ 과거 진료 기록 누적 보기';
 }
-
-function toggleEp(id) {
-  const ep = document.getElementById('ep-' + id);
-  ep.classList.toggle('on');
-}
-
+function toggleEp(id) { document.getElementById('ep-' + id).classList.toggle('on'); }
 function badge(type, force) {
-  const m = {
-    '복약안내':'bg','중간점검':'bb','종료전안내':'bo','마무리상담':'bp','사후관리':'bgo',
-    '태양인':'bo','태음인':'bb','소양인':'bgo','소음인':'bg',
-  };
-  const cls = force === 'gr' ? 'bgr' : (m[type] || 'bgr');
-  return `<span class="badge ${cls}">${esc(type)}</span>`;
+  const m = { '복약안내':'bg','중간점검':'bb','종료전안내':'bo','마무리상담':'bp','태양인':'bo','태음인':'bb','소양인':'bgo','소음인':'bg' };
+  return `<span class="badge ${force === 'gr' ? 'bgr' : (m[type] || 'bgr')}">${esc(type)}</span>`;
 }
-
 function updateCounts() {
   const counts = { '전체': patients.length };
-  patients.forEach(p => {
-    if (p.CRM발송유형) counts[p.CRM발송유형] = (counts[p.CRM발송유형] || 0) + 1;
-  });
-  Object.keys(counts).forEach(k => {
-    const el = document.getElementById('c-' + k);
-    if (el) el.innerText = counts[k];
-  });
-  document.getElementById('qcnt').innerText = `미처리 업무: ${patients.filter(x => x.발송상태 !== '발송완료').length}건`;
+  patients.forEach(p => { if (p.CRM발송유형) counts[p.CRM발송유형] = (counts[p.CRM발송유형] || 0) + 1; });
+  Object.keys(counts).forEach(k => { if(document.getElementById('c-'+k)) document.getElementById('c-'+k).innerText = counts[k]; });
+  document.getElementById('qcnt').innerText = `미처리: ${patients.filter(x => x.발송상태 !== '발송완료').length}건`;
 }
-
 async function updateStat(id, val) {
   try {
     await notion(`/pages/${id}`, 'PATCH', { properties: { '발송상태': { select: { name: val } } } });
     const p = patients.find(x => x.id === id);
     if (p) p.발송상태 = val;
     updateCounts();
-    toast(`상태가 [${val}]로 변경되었습니다.`, 'ok');
-  } catch(e) { toast('상태 변경 실패', 'err'); }
+    toast(`상태 변경: ${val}`, 'ok');
+  } catch(e) { toast('실패', 'err'); }
 }
-
-
-/* 수정된 notion 함수 (Vercel Serverless Function 활용) */
-async function notion(path, method, body) {
-  // 절대 주소(https://api.notion.com...)를 지우고, 
-  // 이미 만들어두신 Vercel 내부 경로(/api/notion)로 보냅니다.
-  const res = await fetch('/api/notion', { 
-    method: 'POST', // Vercel 함수는 대개 POST로 모든 정보를 받도록 설계됩니다.
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      path: path,      // 예: /databases/04f406.../query
-      method: method,  // 예: POST, PATCH
-      token: sessionPw, // 사용자가 입력한 API Secret
-      body: body       // 실제 전송할 데이터
-    })
-  });
-
-  if (!res.ok) {
-    const errData = await res.json();
-    console.error('Notion API Error:', errData);
-    throw new Error('API 연결 실패');
-  }
-  return res.json();
-}
-
 function doLogin() {
-  const val = document.getElementById('pw-input').value;
-  if (!val) return;
-  sessionPw = val;
-  if (document.getElementById('remember-chk').checked) {
-    localStorage.setItem('crm_pw_hint', val);
-  }
+  sessionPw = document.getElementById('pw-input').value;
+  if (!sessionPw) return;
+  if (document.getElementById('remember-chk').checked) localStorage.setItem('crm_pw_hint', sessionPw);
   document.getElementById('login-screen').classList.add('off');
   load();
 }
-
-function logout() {
-  localStorage.removeItem('crm_pw_hint');
-  location.reload();
-}
-
+function logout() { localStorage.removeItem('crm_pw_hint'); location.reload(); }
 function togglePw() {
   const input = document.getElementById('pw-input');
-  const eye = document.getElementById('pw-eye');
-  if (input.type === 'password') {
-    input.type = 'text'; eye.innerText = '🔒';
-  } else {
-    input.type = 'password'; eye.innerText = '👁';
-  }
+  input.type = input.type === 'password' ? 'text' : 'password';
+  document.getElementById('pw-eye').innerText = input.type === 'password' ? '👁' : '🔒';
 }
-
 function toast(msg, type) {
   const t = document.getElementById('toast');
-  t.innerText = msg;
-  t.className = 'on ' + type;
+  t.innerText = msg; t.className = 'on ' + type;
   setTimeout(() => t.className = '', 3000);
 }
-
-function esc(str) {
-  if (!str) return '';
-  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
-}
-
+function esc(str) { return !str ? '' : String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])); }
 function show(id) { document.getElementById(id).style.display = 'flex'; }
 function hide(id) { document.getElementById(id).style.display = 'none'; }
 function setF(f, el) {
@@ -484,10 +485,9 @@ function setF(f, el) {
   document.getElementById('ttitle').innerText = f + ' 리스트';
   renderTable();
 }
-
 function copyDraft(id) {
-  const txt = document.getElementById('view-dt-' + id).innerText;
-  navigator.clipboard.writeText(txt).then(() => toast('클립보드에 복사되었습니다.', 'ok'));
+  navigator.clipboard.writeText(document.getElementById('view-dt-' + id).innerText)
+    .then(() => toast('복사되었습니다.', 'ok'));
 }
 </script>
 </body>
