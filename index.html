@@ -189,6 +189,15 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
   </div>
 </main>
 
+<div class="ai-input-section" style="padding: 20px; background: var(--accent-l); margin-bottom: 20px; border-radius: var(--r);">
+  <h4 style="color: var(--accent); margin-bottom: 10px;">🤖 AI에게 정보 전달</h4>
+  <textarea id="ai-text-input" class="etxt" style="min-height: 80px;" placeholder="환자 특이사항이나 파일 내용을 입력하고 AI에게 전달하세요."></textarea>
+  <div style="margin-top: 10px; display: flex; gap: 10px;">
+    <input type="file" id="ai-file-input" style="font-size: 12px;">
+    <button class="esave" onclick="sendToAI()">AI에게 전달하기</button>
+  </div>
+</div>
+  
 <div class="add-bar">
   <span style="font-size:13px; font-weight:800; color:var(--accent);">QUICK ADD</span>
   <input type="text" id="chart-q" class="chart-inp" placeholder="차트번호 입력" onkeydown="if(event.key==='Enter')addFromChart()">
@@ -293,6 +302,10 @@ function renderTable() {
       </td>
       <td>
         <div class="draft-wrap">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+            <button class="hsm" style="font-size: 11px; background: var(--accent-l); color: var(--accent);" 
+              onclick="generateAI('${p.id}')">✨ AI 초안 생성</button>
+          </div>
           <div class="draft-text" id="view-dt-${p.id}">${esc(p.CRM초안 || '생성된 초안이 없습니다.')}</div>
           <button class="edit-btn" onclick="toggleEp('${p.id}')" title="내용 수정">✎</button>
           
