@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>아이누리 CRM 워크스페이스</title>
+<title>아이누리 CRM</title>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ── CSS Variables & Base ── */
 :root {
   --ink: #1a1714; --ink-m: #6b6560; --ink-f: #c5bfb9;
   --paper: #faf8f5; --warm: #f2ede6; --card: #ffffff;
@@ -41,6 +40,15 @@ main { padding: 20px 2.5% 100px; width: 95%; max-width: 1800px; margin: 0 auto; 
 .login-remember input { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
 .login-remember span { font-size: 13px; color: var(--ink-m); }
 
+/* ── Date Filter Bar ── */
+.date-bar { background: var(--card); border-bottom: 1px solid var(--bd); padding: 12px 2.5%; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.date-bar label { font-size: 12px; font-weight: 700; color: var(--ink-m); }
+.date-inp { padding: 8px 14px; border: 1.5px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 13px; color: var(--ink); background: var(--paper); outline: none; transition: border-color .2s; cursor: pointer; }
+.date-inp:focus { border-color: var(--accent-m); }
+.date-btn { padding: 8px 16px; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .2s; }
+.date-btn:hover { background: #1e4a36; }
+.date-sep { color: var(--ink-f); font-size: 13px; }
+
 /* ── Header ── */
 header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 500; padding: 0 2.5%; }
 .brand { font-family: 'Nanum Myeongjo', serif; font-size: 18px; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 10px; }
@@ -72,8 +80,7 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 .crm-tbl tr:last-child td { border-bottom: none; }
 
 /* ── Memo Box ── */
-.memo-wrap-outer { position: relative; }
-.memo-box { background: var(--warm); border-left: 3px solid var(--bd); border-radius: 0 var(--rs) var(--rs) 0; padding: 12px 14px; font-size: 13px; color: var(--ink-m); line-height: 1.7; white-space: pre-wrap; word-break: break-all; max-height: 5.2em; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); position: relative; }
+.memo-box { background: var(--warm); border-left: 3px solid var(--bd); border-radius: 0 var(--rs) var(--rs) 0; padding: 12px 14px; font-size: 13px; color: var(--ink-m); line-height: 1.7; white-space: pre-wrap; word-break: break-all; max-height: 5.2em; overflow: hidden; transition: max-height 0.4s; position: relative; }
 .memo-box.open { max-height: 2000px; background: #fff; border-color: var(--accent-m); }
 .memo-box:not(.open).has-more::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 30px; background: linear-gradient(transparent, var(--warm)); pointer-events: none; }
 .more-btn { display: block; width: 100%; padding: 6px; margin-top: 8px; background: var(--bd); border: none; border-radius: 4px; color: var(--ink-m); font-size: 11px; font-weight: 600; cursor: pointer; text-align: center; transition: all .2s; }
@@ -87,9 +94,8 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 .edit-btn { position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; border: 1px solid var(--bd); border-radius: var(--rs); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink-m); opacity: 0; transition: all .2s; box-shadow: var(--sh); }
 .draft-wrap:hover .edit-btn { opacity: 1; }
 .edit-btn:hover { color: var(--accent); border-color: var(--accent); }
-.ep { margin-top: 12px; padding: 16px; border: 1px solid var(--accent-m); background: #f9fdfb; border-radius: var(--rs); display: none; animation: slideDown 0.3s ease-out; }
+.ep { margin-top: 12px; padding: 16px; border: 1px solid var(--accent-m); background: #f9fdfb; border-radius: var(--rs); display: none; }
 .ep.on { display: block; }
-@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 .erow { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .elabel { font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-m); margin-bottom: 8px; display: block; }
 .etxt { width: 100%; padding: 12px; background: #fff; border: 1.5px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 13px; color: var(--ink); resize: vertical; min-height: 120px; outline: none; line-height: 1.6; transition: border-color .2s; }
@@ -97,13 +103,11 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 .esave-wrap { margin-top: 14px; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
 .esave { padding: 8px 20px; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .2s; }
 .esave:hover { background: #1e4a36; }
-.esave:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* ── AI Generate Button ── */
 .btn-gen { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--accent-l); color: var(--accent); border: 1px solid var(--accent-m); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; transition: all .2s; margin-bottom: 8px; }
 .btn-gen:hover { background: var(--accent); color: #fff; }
 .btn-gen:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn-gen.loading { background: var(--warm); color: var(--ink-m); border-color: var(--bd); }
 
 /* ── Badges ── */
 .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
@@ -111,13 +115,7 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 .bo { background: var(--warn-l); color: var(--warn); }
 .bb { background: var(--info-l); color: var(--info); }
 .bp { background: var(--purple-l); color: var(--purple); }
-.bgo { background: var(--gold-l); color: var(--gold); }
 .bgr { background: var(--warm); color: var(--ink-m); }
-
-/* ── Checkbox ── */
-.chk-wrap { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
-.chk-wrap input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
-.chk-label { font-size: 12px; font-weight: 700; color: var(--ink-m); }
 
 /* ── Memo Input Panel ── */
 .memo-panel { margin-top: 32px; background: var(--card); border: 1px solid var(--bd); border-radius: var(--r); box-shadow: var(--sh); overflow: hidden; }
@@ -130,7 +128,6 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 .mp-field label { font-size: 11px; font-weight: 700; color: var(--ink-m); letter-spacing: 0.05em; text-transform: uppercase; }
 .mp-inp { padding: 10px 14px; border: 1.5px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 14px; color: var(--ink); background: var(--paper); outline: none; transition: border-color .2s; }
 .mp-inp:focus { border-color: var(--accent-m); background: #fff; }
-.mp-select { padding: 10px 14px; border: 1.5px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 13px; color: var(--ink); background: var(--paper); outline: none; cursor: pointer; }
 .mp-textarea { width: 100%; padding: 12px 14px; border: 1.5px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 14px; color: var(--ink); background: var(--paper); outline: none; resize: vertical; min-height: 90px; line-height: 1.7; transition: border-color .2s; }
 .mp-textarea:focus { border-color: var(--accent-m); background: #fff; }
 .upload-zone { border: 2px dashed var(--bd); border-radius: var(--rs); padding: 18px; text-align: center; color: var(--ink-m); cursor: pointer; transition: all .2s; font-size: 13px; background: var(--paper); }
@@ -144,6 +141,9 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 .chart-inp:focus { border-color: var(--accent); }
 .btn-plus { width: 42px; height: 42px; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
 .btn-plus:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(45,106,79,0.3); }
+
+/* ── Status Select ── */
+.stat-sel { width: 100%; padding: 8px 10px; border: 1.5px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 12px; font-weight: 600; color: var(--ink); background: var(--paper); outline: none; cursor: pointer; margin-bottom: 8px; }
 
 /* ── Toast ── */
 #toast { position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 40px; color: #fff; font-size: 14px; font-weight: 600; box-shadow: var(--sh-lg); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s; white-space: nowrap; }
@@ -164,12 +164,12 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">🌿 아이누리</div>
-    <p class="login-sub">아이누리 CRM 워크스페이스<br>Notion API Secret을 입력해 주세요.</p>
+    <p class="login-sub">아이누리 CRM 워크스페이스<br>비밀번호를 입력해 주세요.</p>
     <div class="pw-wrap">
-      <input type="password" id="pw-input" class="pw-input" placeholder="secret_..." onkeydown="if(event.key==='Enter')doLogin()">
+      <input type="password" id="pw-input" class="pw-input" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
       <button class="pw-toggle" onclick="togglePw()" id="pw-eye">👁</button>
     </div>
-    <button class="login-btn" onclick="doLogin()">인증 후 입장</button>
+    <button class="login-btn" onclick="doLogin()">입장</button>
     <p class="login-error" id="login-err"></p>
     <label class="login-remember"><input type="checkbox" id="remember-chk" checked><span>로그인 상태 유지</span></label>
   </div>
@@ -177,7 +177,7 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 
 <!-- ── HEADER ── -->
 <header>
-  <div class="brand"><div class="bdot"></div>아이누리 CRM <span style="font-weight:400;font-size:14px;margin-left:8px;color:var(--ink-f)">v3.0</span></div>
+  <div class="brand"><div class="bdot"></div>아이누리 CRM <span style="font-weight:400;font-size:14px;margin-left:8px;color:var(--ink-f)">v4.0</span></div>
   <div class="hright">
     <span class="qbadge" id="qcnt">데이터 확인 중...</span>
     <button class="hsm" onclick="load()">↺ 새로고침</button>
@@ -185,13 +185,25 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
   </div>
 </header>
 
+<!-- ── DATE FILTER BAR ── -->
+<div class="date-bar">
+  <label>CRM 예정일 기간</label>
+  <input type="date" id="date-from" class="date-inp">
+  <span class="date-sep">~</span>
+  <input type="date" id="date-to" class="date-inp">
+  <button class="date-btn" onclick="load()">🔍 조회</button>
+  <button class="hsm" onclick="setToday()">오늘</button>
+  <button class="hsm" onclick="setThisWeek()">이번 주</button>
+  <button class="hsm" onclick="clearDateFilter()">전체 보기</button>
+</div>
+
 <!-- ── FILTER BAR ── -->
 <div class="fbar">
   <button class="ftab on" onclick="setF('전체',this)">전체 <span class="tcnt" id="c-전체">0</span></button>
-  <button class="ftab" onclick="setF('복약안내',this)">💊 복약안내 <span class="tcnt" id="c-복약안내">0</span></button>
-  <button class="ftab" onclick="setF('중간점검',this)">🔍 중간점검 <span class="tcnt" id="c-중간점검">0</span></button>
-  <button class="ftab" onclick="setF('종료전안내',this)">⏰ 종료전안내 <span class="tcnt" id="c-종료전안내">0</span></button>
-  <button class="ftab" onclick="setF('마무리상담',this)">🎯 마무리상담 <span class="tcnt" id="c-마무리상담">0</span></button>
+  <button class="ftab" onclick="setF('대기',this)">⏳ 대기 <span class="tcnt" id="c-대기">0</span></button>
+  <button class="ftab" onclick="setF('검토완료',this)">✅ 검토완료 <span class="tcnt" id="c-검토완료">0</span></button>
+  <button class="ftab" onclick="setF('보류',this)">🔸 보류 <span class="tcnt" id="c-보류">0</span></button>
+  <button class="ftab" onclick="setF('발송완료',this)">📨 발송완료 <span class="tcnt" id="c-발송완료">0</span></button>
 </div>
 
 <!-- ── MAIN ── -->
@@ -204,71 +216,50 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
   <div id="tbl-wrap" style="display:none">
     <div class="thead">
       <span class="ttitle" id="ttitle">전체 리스트</span>
-      <span class="tmeta" id="tmeta">오늘 처리할 환자 정보를 확인하세요.</span>
+      <span class="tmeta" id="tmeta"></span>
     </div>
     <table class="crm-tbl">
       <thead>
         <tr>
           <th style="width:50px;text-align:center">No.</th>
-          <th style="width:110px">환자 정보</th>
-          <th style="width:120px">처방 상세</th>
-          <th style="width:260px">진료 메모</th>
-          <th>AI CRM 초안 및 수정</th>
-          <th style="width:140px;text-align:center">상태 관리</th>
+          <th style="width:130px">환자 정보</th>
+          <th style="width:120px">일정</th>
+          <th style="width:260px">메모</th>
+          <th>CRM 초안</th>
+          <th style="width:150px;text-align:center">상태 관리</th>
         </tr>
       </thead>
       <tbody id="tbody"></tbody>
     </table>
 
-    <!-- ── MEMO INPUT PANEL ── -->
+    <!-- ── AI 메모 입력 패널 ── -->
     <div class="memo-panel">
       <div class="memo-panel-header" onclick="toggleMemoPanel()">
         <div class="memo-panel-title">
-          ✏️ 진료 메모 입력
-          <span style="font-size:12px;font-weight:400;font-family:'Pretendard';color:var(--ink-m)">| 텍스트 입력 또는 파일 첨부 → n8n → Notion 자동 저장</span>
+          ✨ AI 환자 등록
+          <span style="font-size:12px;font-weight:400;font-family:'Pretendard';color:var(--ink-m)">| 텍스트 입력 → Gemini AI 분석 → Notion 자동 저장</span>
         </div>
         <span id="memo-panel-toggle" style="color:var(--ink-m);font-size:13px;">▼ 펼치기</span>
       </div>
       <div class="memo-panel-body" id="memo-panel-body">
-        <div class="mp-row">
-          <div class="mp-field" style="width:160px">
-            <label>차트번호</label>
-            <input type="text" id="mp-chart" class="mp-inp" placeholder="예: A-1234">
-          </div>
-          <div class="mp-field" style="width:160px">
-            <label>환자명</label>
-            <input type="text" id="mp-name" class="mp-inp" placeholder="홍길동">
-          </div>
-          <div class="mp-field" style="width:180px">
-            <label>메모 유형</label>
-            <select id="mp-type" class="mp-select">
-              <option>진료 중 관찰</option>
-              <option>전화 통화 내용</option>
-              <option>한약 수령 기록</option>
-              <option>경과 메모</option>
-              <option>특이사항</option>
-            </select>
-          </div>
-        </div>
-
         <!-- 텍스트 입력 -->
         <div style="margin-bottom:14px">
-          <label style="font-size:11px;font-weight:700;color:var(--ink-m);letter-spacing:0.05em;text-transform:uppercase;display:block;margin-bottom:6px">메모 내용 (직접 입력)</label>
-          <textarea id="mp-text" class="mp-textarea" placeholder="예: 오늘 내원. 소화는 많이 좋아졌다고 함. 수면은 아직 불규칙. 다음 처방 시 수면 개선 방향으로 조정 필요."></textarea>
+          <label style="font-size:11px;font-weight:700;color:var(--ink-m);letter-spacing:0.05em;text-transform:uppercase;display:block;margin-bottom:6px">내용 입력 (SNS 대화, 메모, 진료 기록 등 자유형식)</label>
+          <textarea id="mp-text" class="mp-textarea" rows="6" placeholder="예: 관우 차트 10000005, 오늘 4/18 한약 2주치 수령. 소화는 많이 좋아졌다고 함. 수면은 아직 불규칙.&#10;&#10;또는 SNS 대화 내용을 그대로 붙여넣어도 됩니다."></textarea>
         </div>
 
         <!-- 파일 첨부 -->
         <div style="margin-bottom:16px">
-          <label style="font-size:11px;font-weight:700;color:var(--ink-m);letter-spacing:0.05em;text-transform:uppercase;display:block;margin-bottom:6px">파일 첨부 (녹음 / 텍스트 파일)</label>
+          <label style="font-size:11px;font-weight:700;color:var(--ink-m);letter-spacing:0.05em;text-transform:uppercase;display:block;margin-bottom:6px">파일 첨부 (텍스트 파일)</label>
           <div class="upload-zone" onclick="document.getElementById('mp-file').click()" id="upload-label">
-            <input type="file" id="mp-file" accept=".mp3,.m4a,.wav,.txt,.pdf" onchange="onFileSelect(this)">
-            🎤 클릭하여 파일 선택 (mp3, m4a, wav, txt, pdf)
+            <input type="file" id="mp-file" accept=".txt" onchange="onFileSelect(this)">
+            📄 클릭하여 텍스트 파일 선택 (.txt)
           </div>
         </div>
 
         <div class="mp-actions">
           <button class="hsm" onclick="clearMemoPanel()">초기화</button>
-          <button class="esave" id="mp-send-btn" onclick="sendMemo()">📤 n8n으로 전송 → Notion 저장</button>
+          <button class="esave" id="mp-send-btn" onclick="sendAI()">✨ AI 분석 후 Notion 저장</button>
         </div>
       </div>
     </div>
@@ -277,66 +268,49 @@ header { background: var(--card); border-bottom: 1px solid var(--bd); height: 64
 
 <!-- ── BOTTOM BAR ── -->
 <div class="add-bar">
-  <span style="font-size:13px;font-weight:800;color:var(--accent)">QUICK ADD</span>
-  <input type="text" id="chart-q" class="chart-inp" placeholder="차트번호 입력" onkeydown="if(event.key==='Enter')addFromChart()">
+  <span style="font-size:13px;font-weight:800;color:var(--accent)">직접 등록</span>
+  <input type="text" id="chart-q" class="chart-inp" placeholder="차트번호 입력 후 Enter" onkeydown="if(event.key==='Enter')addFromChart()">
   <button class="btn-plus" onclick="addFromChart()">+</button>
-  <div style="margin-left:auto;color:var(--ink-f);font-size:12px">© i-nuri Network. Data Sovereignty Protected.</div>
+  <div style="margin-left:auto;color:var(--ink-f);font-size:12px">© 아이누리한의원 CRM</div>
 </div>
 
 <div id="toast"></div>
 
 <script>
-/* ════════════════════════════════════════════
-   ★ 설정값 — 여기만 수정하면 됩니다
-   ════════════════════════════════════════════ */
-const DB_ID = '04f406a5be9b454b9dda793fac2d4fb4';
+/* ════════════════════════════════════════
+   설정값
+   ════════════════════════════════════════ */
+const DB_ID      = '04f406a5-be9b-454b-9dda-793fac2d4fb4';
+const N8N_URL    = 'https://1jump2sky.duckdns.org/webhook/ai-crm-update';
+const N8N_AI_URL = 'https://1jump2sky.duckdns.org/webhook/ai-crm-ai';
 
-// n8n Webhook Production URL (Oracle Cloud 외부 IP 또는 도메인으로 교체)
-// 예: 'https://your-oracle-ip:5678/webhook/ai-crm-update'
-// 또는 도메인 사용 시: 'https://n8n.yourdomain.com/webhook/ai-crm-update'
-const N8N_URL = 'http://YOUR_ORACLE_IP:5678/webhook/ai-crm-update';
-
-/* ════════════════════════════════════════════
-   상태 변수
-   ════════════════════════════════════════════ */
-let patients = [];
+/* ── 상태 ── */
+let patients  = [];
 let curFilter = '전체';
 let sessionPw = '';
 
 /* ── 초기화 ── */
 window.onload = () => {
-  const saved = localStorage.getItem('crm_pw_hint');
-  if (saved) {
-    sessionPw = saved;
-    document.getElementById('login-screen').classList.add('off');
-    load();
-  }
+  const saved = localStorage.getItem('crm_pw');
+  if (saved) { sessionPw = saved; document.getElementById('login-screen').classList.add('off'); load(); }
+  setToday();
 };
 
-/* ════════════════════════════════════════════
-   Notion API 호출 — /api/notion 프록시 경유
-   (CORS 문제 없음: 첫 번째 코드의 방식 유지)
-   ════════════════════════════════════════════ */
+/* ── Notion 프록시 호출 ── */
 async function notion(path, method, body) {
-  const res = await fetch('/api/notion', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ path, method, token: sessionPw, body })
+  const res = await fetch('/api/notion?path=' + encodeURIComponent(path), {
+    method: method || 'GET',
+    headers: { 'Content-Type': 'application/json', 'x-crm-password': sessionPw },
+    body: ['GET','HEAD'].includes(method) ? undefined : JSON.stringify(body)
   });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    console.error('Notion proxy error:', err);
-    throw new Error('API 연결 실패');
-  }
+  if (res.status === 401) { logout(); throw new Error('인증 실패'); }
+  if (!res.ok) throw new Error('API 오류');
   return res.json();
 }
 
-/* ════════════════════════════════════════════
-   n8n Webhook 호출 — 직접 POST
-   (n8n 서버가 외부 IP를 사용해야 CORS 없음)
-   ════════════════════════════════════════════ */
-async function callN8N(payload) {
-  const res = await fetch(N8N_URL, {
+/* ── n8n 호출 ── */
+async function callN8N(url, payload) {
+  const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
@@ -345,19 +319,51 @@ async function callN8N(payload) {
   return res.json().catch(() => ({}));
 }
 
+/* ── 날짜 필터 ── */
+function setToday() {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('date-from').value = today;
+  document.getElementById('date-to').value   = today;
+}
+function setThisWeek() {
+  const now  = new Date();
+  const mon  = new Date(now); mon.setDate(now.getDate() - now.getDay() + 1);
+  const sun  = new Date(mon); sun.setDate(mon.getDate() + 6);
+  document.getElementById('date-from').value = mon.toISOString().split('T')[0];
+  document.getElementById('date-to').value   = sun.toISOString().split('T')[0];
+}
+function clearDateFilter() {
+  document.getElementById('date-from').value = '';
+  document.getElementById('date-to').value   = '';
+  load();
+}
+
 /* ── 데이터 로드 ── */
 async function load() {
   show('load-st'); hide('tbl-wrap');
+  const from = document.getElementById('date-from').value;
+  const to   = document.getElementById('date-to').value;
+
   try {
-    const res = await notion(`/databases/${DB_ID}/query`, 'POST', {
-      sorts: [{ property: '한약수령일', direction: 'descending' }]
-    });
+    const queryBody = {
+      sorts: [{ property: 'CRM예정일', direction: 'ascending' }]
+    };
+
+    // 날짜 필터 적용
+    if (from || to) {
+      const filters = [];
+      if (from) filters.push({ property: 'CRM예정일', date: { on_or_after: from } });
+      if (to)   filters.push({ property: 'CRM예정일', date: { on_or_before: to } });
+      queryBody.filter = filters.length === 1 ? filters[0] : { and: filters };
+    }
+
+    const res = await notion(`/databases/${DB_ID}/query`, 'POST', queryBody);
     patients = res.results.map(parse);
     renderTable();
     updateCounts();
   } catch(e) {
     hide('load-st');
-    toast('데이터를 불러오지 못했습니다. API Secret을 확인하세요.', 'err');
+    toast('데이터를 불러오지 못했습니다.', 'err');
   }
 }
 
@@ -366,197 +372,196 @@ function parse(page) {
   const p = page.properties;
   const g = (k, t) => {
     if (!p[k]) return '';
-    if (t === 'title') return p[k].title?.[0]?.plain_text || '';
-    if (t === 'rt')    return p[k].rich_text?.map(x => x.plain_text).join('') || '';
-    if (t === 'sel')   return p[k].select?.name || '';
-    if (t === 'num')   return p[k].number ?? '';
-    if (t === 'date')  return p[k].date?.start || '';
+    if (t === 'title')  return p[k].title?.[0]?.plain_text || '';
+    if (t === 'rt')     return p[k].rich_text?.map(x => x.plain_text).join('') || '';
+    if (t === 'sel')    return p[k].select?.name || '';
+    if (t === 'date')   return p[k].date?.start || '';
     return '';
   };
   return {
-    id: page.id,
-    환자명: g('환자명','title'), 차트번호: g('차트번호','rt'),
-    처방종류: g('처방종류','sel'), 처방일수: g('처방일수','sel'),
-    처방차수: g('처방차수','num'), 한약수령일: g('한약수령일','date'),
-    상태: g('상태','sel'), 체질: g('체질','sel'),
-    메모: g('진료 메모','rt'),
-    CRM발송유형: g('CRM발송유형','sel'),
-    CRM초안: g('CRM초안','rt'),
-    발송상태: g('발송상태','sel')
+    id:         page.id,
+    관리번호:   g('관리번호', 'title'),
+    차트번호:   g('차트번호', 'rt'),
+    환자명:     g('환자명', 'rt'),
+    등록일:     g('등록일', 'date'),
+    CRM예정일:  g('CRM예정일', 'date'),
+    메모:       g('메모', 'rt'),
+    CRM초안:    g('CRM초안', 'rt'),
+    발송상태:   g('발송상태', 'sel')
   };
 }
 
 /* ── 테이블 렌더링 ── */
 function renderTable() {
   hide('load-st'); show('tbl-wrap');
-  const list = curFilter === '전체' ? patients : patients.filter(p => p.CRM발송유형 === curFilter);
+  const list = curFilter === '전체' ? patients : patients.filter(p => p.발송상태 === curFilter);
+  document.getElementById('tmeta').innerText = `총 ${list.length}건`;
   document.getElementById('tbody').innerHTML = list.map((p, i) => {
-    const hasMore = (p.메모||'').split('\n').length > 4 || (p.메모||'').length > 100;
+    const hasMore  = (p.메모||'').length > 100;
     const hasDraft = p.CRM초안 && p.CRM초안.trim();
+    const statColor = { '대기':'bgr', '검토완료':'bg', '보류':'bo', '발송완료':'bb' }[p.발송상태] || 'bgr';
     return `
     <tr id="row-${p.id}">
       <td style="text-align:center;color:var(--ink-f);font-weight:700">${i+1}</td>
       <td>
-        <div style="font-weight:800;font-size:15px;margin-bottom:4px">${esc(p.환자명)}</div>
-        <div style="font-size:12px;color:var(--ink-m)">${esc(p.차트번호)}</div>
-        <div style="margin-top:8px">${p.체질 ? badge(p.체질,'gr') : ''}</div>
+        <div style="font-weight:800;font-size:15px;margin-bottom:4px">${esc(p.환자명||'(이름없음)')}</div>
+        <div style="font-size:12px;color:var(--ink-m);margin-bottom:4px">차트 ${esc(p.차트번호)}</div>
+        <div style="font-size:11px;color:var(--ink-f)">관리번호 ${esc(p.관리번호)}</div>
       </td>
       <td>
-        <div style="margin-bottom:6px">${badge(p.CRM발송유형||'미정')}</div>
-        <div style="font-size:12px;color:var(--ink-m);line-height:1.4">
-          ${esc(p.처방종류)}<br>
-          <span style="font-weight:700">${esc(p.처방일수)}</span> (${esc(p.처방차수)}차)
+        <div style="font-size:12px;color:var(--ink-m);margin-bottom:4px">
+          <span style="font-weight:700;color:var(--accent)">CRM예정일</span><br>
+          ${p.CRM예정일 ? `<span style="font-size:14px;font-weight:700;color:var(--ink)">${p.CRM예정일}</span>` : '<span style="color:var(--ink-f)">미정</span>'}
         </div>
+        <div style="font-size:11px;color:var(--ink-f)">등록 ${esc(p.등록일)}</div>
       </td>
       <td>
-        <div class="memo-wrap-outer">
-          <div id="m-box-${p.id}" class="memo-box ${hasMore?'has-more':''}">${esc(p.메모||'진료 기록이 없습니다.')}</div>
-          ${hasMore ? `<button class="more-btn" onclick="toggleMemo('${p.id}')">▼ 과거 진료 기록 누적 보기</button>` : ''}
-        </div>
+        <div id="m-box-${p.id}" class="memo-box ${hasMore?'has-more':''}">${esc(p.메모||'메모 없음')}</div>
+        ${hasMore ? `<button class="more-btn" onclick="toggleMemo('${p.id}')">▼ 더 보기</button>` : ''}
       </td>
       <td>
         <div class="draft-wrap">
           <button class="btn-gen" id="gen-btn-${p.id}" onclick="generateDraft('${p.id}')">
-            ✨ AI 초안 ${hasDraft ? '재생성' : '생성'}
+            ✨ CRM 초안 ${hasDraft ? '재생성' : '생성'}
           </button>
           <div class="draft-text ${hasDraft?'':'draft-empty'}" id="view-dt-${p.id}">
             ${hasDraft ? esc(p.CRM초안) : '버튼을 눌러 AI 초안을 생성하세요.'}
           </div>
-          ${hasDraft ? `<button class="edit-btn" onclick="toggleEp('${p.id}')" title="내용 수정">✎</button>` : ''}
+          ${hasDraft ? `<button class="edit-btn" onclick="toggleEp('${p.id}')" title="수정">✎</button>` : ''}
           <div class="ep" id="ep-${p.id}">
             <div class="erow">
               <div>
-                <label class="elabel">최종 발송용 문구 수정</label>
+                <label class="elabel">발송용 문구 수정</label>
                 <textarea class="etxt" id="dt-${p.id}">${esc(p.CRM초안)}</textarea>
               </div>
               <div>
-                <label class="elabel" style="color:var(--warn)">수정 사유 (메모에 자동 누적)</label>
-                <textarea class="etxt" id="rs-${p.id}" placeholder="예: 환자 최근 소화불량 호소 반영"></textarea>
+                <label class="elabel" style="color:var(--warn)">수정 사유</label>
+                <textarea class="etxt" id="rs-${p.id}" placeholder="수정 이유를 간단히 입력하세요"></textarea>
               </div>
             </div>
             <div class="esave-wrap">
-              <span style="font-size:11px;color:var(--ink-f)">* 저장 시 노션 초안 + 메모 동시 업데이트</span>
-              <button class="esave" onclick="saveDraft('${p.id}')">💾 변경사항 저장</button>
+              <button class="esave" onclick="saveDraft('${p.id}')">💾 저장</button>
             </div>
           </div>
         </div>
       </td>
       <td style="text-align:center">
-        <label class="chk-wrap" style="justify-content:center;margin-bottom:10px">
-          <input type="checkbox" ${p.발송상태==='발송완료'?'checked':''} onchange="updateStat('${p.id}',this.checked?'발송완료':'대기')">
-          <span class="chk-label">${p.발송상태==='발송완료'?'발송완료':'발송대기'}</span>
-        </label>
-        <button class="hsm" style="width:100%;font-size:11px" onclick="copyDraft('${p.id}')">📋 복사하기</button>
+        <select class="stat-sel" onchange="updateStat('${p.id}', this.value)">
+          <option ${p.발송상태==='대기'?'selected':''}>대기</option>
+          <option ${p.발송상태==='검토완료'?'selected':''}>검토완료</option>
+          <option ${p.발송상태==='보류'?'selected':''}>보류</option>
+          <option ${p.발송상태==='발송완료'?'selected':''}>발송완료</option>
+        </select>
+        <button class="hsm" style="width:100%;font-size:11px" onclick="copyDraft('${p.id}')">📋 초안 복사</button>
       </td>
     </tr>`;
-  }).join('');
+  }).join('') || `<tr><td colspan="6" style="text-align:center;padding:60px;color:var(--ink-f)">해당 기간에 CRM 예정 환자가 없습니다.</td></tr>`;
 }
 
-/* ════════════════════════════════════════════
-   ① AI 초안 생성
-   웹 → n8n → OpenClaw(GPT-4o) → Notion 저장
-   → 2초 후 자동 새로고침
-   ════════════════════════════════════════════ */
+/* ── AI CRM 초안 생성 ── */
 async function generateDraft(id) {
-  const p = patients.find(x => x.id === id);
+  const p   = patients.find(x => x.id === id);
   const btn = document.getElementById('gen-btn-' + id);
-  btn.disabled = true;
-  btn.classList.add('loading');
-  btn.textContent = '⏳ 생성 중...';
-  toast(`${p.환자명}님 초안 생성 요청 중...`, 'info');
+  btn.disabled = true; btn.textContent = '⏳ 생성 중...';
+  toast(`${p.환자명||'환자'}님 초안 생성 중...`, 'info');
 
   try {
-    await callN8N({
-      action: 'GENERATE',
-      pageId: id,
-      patientData: {
-        환자명: p.환자명, 차트번호: p.차트번호,
-        처방종류: p.처방종류, 처방일수: p.처방일수,
-        처방차수: p.처방차수, 한약수령일: p.한약수령일,
-        체질: p.체질, CRM발송유형: p.CRM발송유형,
-        메모: p.메모
-      }
+    // Gemini AI로 CRM 초안 생성 요청
+    const text = `환자명: ${p.환자명}\n차트번호: ${p.차트번호}\n메모: ${p.메모}\nCRM예정일: ${p.CRM예정일}\n\n위 내용을 바탕으로 한의원 CRM 문자 초안을 작성해주세요. 친근하고 따뜻한 톤으로, 200자 이내로 작성해주세요.`;
+
+    const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyDx9-9tZHtx2HntpnCHDM5_ISOqvg0meZg`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text }] }] })
     });
-    toast('초안이 생성되었습니다. 잠시 후 갱신됩니다...', 'ok');
-    setTimeout(() => load(), 2500);
+    const geminiData = await geminiRes.json();
+    const draft = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+    if (!draft) throw new Error('초안 생성 실패');
+
+    // Notion에 저장
+    await notion(`/pages/${id}`, 'PATCH', {
+      properties: { 'CRM초안': { rich_text: [{ text: { content: draft } }] } }
+    });
+
+    p.CRM초안 = draft;
+    toast('초안이 생성되었습니다!', 'ok');
+    renderTable();
   } catch(e) {
-    toast('초안 생성 실패. n8n 서버 주소를 확인하세요.', 'err');
-    btn.disabled = false;
-    btn.classList.remove('loading');
-    btn.textContent = '✨ AI 초안 생성';
+    toast('초안 생성 실패: ' + e.message, 'err');
+    btn.disabled = false; btn.textContent = '✨ CRM 초안 생성';
   }
 }
 
-/* ════════════════════════════════════════════
-   ② 메모 전송 (텍스트 또는 파일)
-   웹 → n8n → (Whisper 변환) → Notion 메모 누적
-   ════════════════════════════════════════════ */
-async function sendMemo() {
-  const chart = document.getElementById('mp-chart').value.trim();
-  const name  = document.getElementById('mp-name').value.trim();
-  const type  = document.getElementById('mp-type').value;
-  const text  = document.getElementById('mp-text').value.trim();
+/* ── AI 텍스트 분석 후 Notion 등록 ── */
+async function sendAI() {
+  const text = document.getElementById('mp-text').value.trim();
   const file  = document.getElementById('mp-file').files[0];
 
-  if (!chart || !name) { toast('차트번호와 환자명을 입력하세요.', 'err'); return; }
-  if (!text && !file)  { toast('메모 내용 또는 파일을 첨부하세요.', 'err'); return; }
+  let content = text;
+
+  if (!content && file) {
+    content = await file.text();
+  }
+  if (!content) { toast('내용을 입력하거나 파일을 첨부하세요.', 'err'); return; }
 
   const btn = document.getElementById('mp-send-btn');
-  btn.disabled = true; btn.textContent = '⏳ 전송 중...';
+  btn.disabled = true; btn.textContent = '⏳ AI 분석 중...';
 
   try {
-    let payload = { action: 'AI_INPUT', chart, name, type };
-
-    if (file) {
-      // 파일을 base64로 변환해서 전송
-      const b64 = await fileToBase64(file);
-      payload.fileName = file.name;
-      payload.fileType = file.type;
-      payload.fileData = b64;
-    }
-    if (text) {
-      payload.content = text;
-    }
-
-    await callN8N(payload);
-    toast(`${name} 환자 메모가 전송되었습니다. n8n이 Notion에 저장합니다.`, 'ok');
+    await callN8N(N8N_AI_URL, { text: content });
+    toast('AI가 분석하여 Notion에 저장했습니다!', 'ok');
     clearMemoPanel();
-    setTimeout(() => load(), 3000);
+    setTimeout(() => load(), 2000);
   } catch(e) {
-    toast('전송 실패. n8n 서버 주소를 확인하세요.', 'err');
+    toast('전송 실패: ' + e.message, 'err');
   } finally {
-    btn.disabled = false; btn.textContent = '📤 n8n으로 전송 → Notion 저장';
+    btn.disabled = false; btn.textContent = '✨ AI 분석 후 Notion 저장';
   }
 }
 
-function fileToBase64(file) {
-  return new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = () => res(r.result.split(',')[1]);
-    r.onerror = rej;
-    r.readAsDataURL(file);
-  });
+/* ── 차트번호로 직접 조회/등록 ── */
+async function addFromChart() {
+  const chart = document.getElementById('chart-q').value.trim();
+  if (!chart) return;
+
+  toast(`차트번호 ${chart} 조회 중...`, 'info');
+  try {
+    const res = await callN8N(N8N_URL, {
+      action: 'READ',
+      차트번호: chart
+    });
+    if (res.rows && res.rows.length > 0) {
+      toast(`${res.rows.length}건 조회되었습니다.`, 'ok');
+      load();
+    } else {
+      toast('해당 차트번호가 없습니다. AI 등록 패널을 이용해주세요.', 'info');
+    }
+  } catch(e) {
+    toast('조회 실패', 'err');
+  }
+  document.getElementById('chart-q').value = '';
 }
 
-/* ── 초안 수정 저장 (직접 Notion PATCH) ── */
+/* ── 초안 수정 저장 ── */
 async function saveDraft(id) {
   const newDraft = document.getElementById('dt-' + id).value;
-  const reason   = document.getElementById('rs-' + id).value;
-  const p = patients.find(x => x.id === id);
-  if (!reason.trim()) { toast('수정 사유를 입력하세요.', 'err'); return; }
+  const reason   = document.getElementById('rs-' + id).value.trim();
+  if (!reason) { toast('수정 사유를 입력하세요.', 'err'); return; }
 
-  const today = new Date().toLocaleDateString('ko-KR', {month:'2-digit',day:'2-digit'}).replace(/\. /g,'-').replace('.','');
+  const p = patients.find(x => x.id === id);
+  const today = new Date().toLocaleDateString('ko-KR');
   const newMemo = `[${today} 수정] ${reason}\n${p.메모}`;
 
   try {
     await notion(`/pages/${id}`, 'PATCH', {
       properties: {
-        'CRM초안':   { rich_text: [{ text: { content: newDraft } }] },
-        '진료 메모': { rich_text: [{ text: { content: newMemo  } }] }
+        'CRM초안': { rich_text: [{ text: { content: newDraft } }] },
+        '메모':    { rich_text: [{ text: { content: newMemo  } }] }
       }
     });
     p.CRM초안 = newDraft; p.메모 = newMemo;
-    toast('노션에 저장되었습니다.', 'ok');
+    toast('저장되었습니다.', 'ok');
     renderTable();
   } catch(e) { toast('저장 실패', 'err'); }
 }
@@ -564,7 +569,9 @@ async function saveDraft(id) {
 /* ── 발송 상태 변경 ── */
 async function updateStat(id, val) {
   try {
-    await notion(`/pages/${id}`, 'PATCH', { properties: { '발송상태': { select: { name: val } } } });
+    await notion(`/pages/${id}`, 'PATCH', {
+      properties: { '발송상태': { select: { name: val } } }
+    });
     const p = patients.find(x => x.id === id);
     if (p) p.발송상태 = val;
     updateCounts();
@@ -574,73 +581,84 @@ async function updateStat(id, val) {
 
 /* ── 카운트 업데이트 ── */
 function updateCounts() {
-  const counts = { '전체': patients.length };
-  patients.forEach(p => { if (p.CRM발송유형) counts[p.CRM발송유형] = (counts[p.CRM발송유형]||0)+1; });
+  const counts = { '전체': patients.length, '대기': 0, '검토완료': 0, '보류': 0, '발송완료': 0 };
+  patients.forEach(p => { if (counts[p.발송상태] !== undefined) counts[p.발송상태]++; });
   Object.keys(counts).forEach(k => { const el = document.getElementById('c-'+k); if(el) el.innerText = counts[k]; });
-  document.getElementById('qcnt').innerText = `미처리: ${patients.filter(x=>x.발송상태!=='발송완료').length}건`;
+  const undone = patients.filter(x => x.발송상태 !== '발송완료').length;
+  document.getElementById('qcnt').innerText = `미발송: ${undone}건`;
+}
+
+/* ── 로그인 ── */
+async function doLogin() {
+  const pw = document.getElementById('pw-input').value;
+  if (!pw) return;
+
+  // 서버에 비밀번호 검증
+  try {
+    const res = await fetch('/api/notion?path=/users/me', {
+      method: 'GET',
+      headers: { 'x-crm-password': pw }
+    });
+    if (res.status === 401) {
+      document.getElementById('login-err').innerText = '비밀번호가 올바르지 않습니다.';
+      return;
+    }
+    sessionPw = pw;
+    if (document.getElementById('remember-chk').checked) localStorage.setItem('crm_pw', pw);
+    document.getElementById('login-screen').classList.add('off');
+    load();
+  } catch(e) {
+    document.getElementById('login-err').innerText = '서버 연결 실패';
+  }
+}
+
+function logout() { localStorage.removeItem('crm_pw'); location.reload(); }
+function togglePw() {
+  const input = document.getElementById('pw-input');
+  input.type = input.type === 'password' ? 'text' : 'password';
+  document.getElementById('pw-eye').innerText = input.type === 'password' ? '👁' : '🔒';
 }
 
 /* ── UI 헬퍼 ── */
 function toggleMemo(id) {
   const box = document.getElementById('m-box-'+id);
   box.classList.toggle('open');
-  box.nextElementSibling.innerText = box.classList.contains('open') ? '▲ 기록 닫기' : '▼ 과거 진료 기록 누적 보기';
+  box.nextElementSibling.innerText = box.classList.contains('open') ? '▲ 닫기' : '▼ 더 보기';
 }
 function toggleEp(id) { document.getElementById('ep-'+id).classList.toggle('on'); }
 function toggleMemoPanel() {
-  const body = document.getElementById('memo-panel-body');
+  const body   = document.getElementById('memo-panel-body');
   const toggle = document.getElementById('memo-panel-toggle');
   body.classList.toggle('open');
   toggle.textContent = body.classList.contains('open') ? '▲ 닫기' : '▼ 펼치기';
 }
 function onFileSelect(input) {
-  const label = document.getElementById('upload-label');
-  label.textContent = input.files[0] ? `📎 ${input.files[0].name}` : '🎤 클릭하여 파일 선택';
+  document.getElementById('upload-label').childNodes[1].textContent = input.files[0] ? `📎 ${input.files[0].name}` : '📄 클릭하여 텍스트 파일 선택 (.txt)';
 }
 function clearMemoPanel() {
-  document.getElementById('mp-chart').value = '';
-  document.getElementById('mp-name').value = '';
   document.getElementById('mp-text').value = '';
   document.getElementById('mp-file').value = '';
-  document.getElementById('upload-label').innerHTML = `<input type="file" id="mp-file" accept=".mp3,.m4a,.wav,.txt,.pdf" onchange="onFileSelect(this)">🎤 클릭하여 파일 선택 (mp3, m4a, wav, txt, pdf)`;
 }
-function badge(type, force) {
-  const m = {'복약안내':'bg','중간점검':'bb','종료전안내':'bo','마무리상담':'bp','태양인':'bo','태음인':'bb','소양인':'bgo','소음인':'bg'};
-  return `<span class="badge ${force==='gr'?'bgr':(m[type]||'bgr')}">${esc(type)}</span>`;
-}
-function doLogin() {
-  sessionPw = document.getElementById('pw-input').value;
-  if (!sessionPw) return;
-  if (document.getElementById('remember-chk').checked) localStorage.setItem('crm_pw_hint', sessionPw);
-  document.getElementById('login-screen').classList.add('off');
-  load();
-}
-function logout() { localStorage.removeItem('crm_pw_hint'); location.reload(); }
-function togglePw() {
-  const input = document.getElementById('pw-input');
-  input.type = input.type==='password'?'text':'password';
-  document.getElementById('pw-eye').innerText = input.type==='password'?'👁':'🔒';
-}
-function toast(msg, type) {
-  const t = document.getElementById('toast');
-  t.innerText = msg; t.className = 'on '+type;
-  clearTimeout(t._t); t._t = setTimeout(()=>t.className='', 3500);
-}
-function esc(str) { return !str?'':String(str).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])); }
-function show(id) { document.getElementById(id).style.display='flex'; }
-function hide(id) { document.getElementById(id).style.display='none'; }
 function setF(f, el) {
-  curFilter=f;
-  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('on'));
+  curFilter = f;
+  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
-  document.getElementById('ttitle').innerText = f+' 리스트';
   renderTable();
 }
 function copyDraft(id) {
-  navigator.clipboard.writeText(document.getElementById('view-dt-'+id).innerText)
-    .then(()=>toast('복사되었습니다.','ok'));
+  const txt = document.getElementById('view-dt-'+id).innerText;
+  navigator.clipboard.writeText(txt).then(() => toast('복사되었습니다.', 'ok'));
 }
-function addFromChart() { toast('차트 추가 기능은 별도 구현 필요','info'); }
+function toast(msg, type) {
+  const t = document.getElementById('toast');
+  t.innerText = msg; t.className = 'on ' + type;
+  clearTimeout(t._t); t._t = setTimeout(() => t.className = '', 3500);
+}
+function esc(str) {
+  return !str ? '' : String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
+}
+function show(id) { document.getElementById(id).style.display = 'flex'; }
+function hide(id) { document.getElementById(id).style.display = 'none'; }
 </script>
 </body>
 </html>
