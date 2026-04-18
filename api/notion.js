@@ -1,8 +1,8 @@
 // api/notion.js
 // Vercel Serverless Function — CommonJS 형식
 // Vercel 환경변수 설정 필요:
-//   NOTION_API_KEY = ntn_xxxxxxx
-//   CRM_PASSWORD   = 원하는비밀번호
+//   NOTION_API_KEY = (Vercel 환경변수에서 설정)
+//   CRM_PASSWORD   = (Vercel 환경변수에서 설정)
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -26,18 +26,17 @@ module.exports = async function handler(req, res) {
   }
 
   // 쿼리스트링에서 Notion 경로 추출
-  // 예: /api/notion?path=/databases/xxx/query
   const notionPath = req.query.path || '/users/me';
 
   try {
     const response = await fetch('https://api.notion.com/v1' + notionPath, {
-      method: req.method,
+      method: req.method === 'GET' ? 'GET' : req.method,
       headers: {
         'Authorization': 'Bearer ' + apiKey,
         'Notion-Version': '2022-06-28',
         'Content-Type': 'application/json',
       },
-      body: ['GET', 'HEAD'].includes(req.method)
+      body: ['GET', 'HEAD', 'OPTIONS'].includes(req.method)
         ? undefined
         : JSON.stringify(req.body),
     });
