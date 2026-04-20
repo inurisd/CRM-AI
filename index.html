@@ -358,8 +358,15 @@ function renderTable() {
       </td>
       <td class="memo-cell">
         <div class="memo-wrap">
-          <div id="m-box-${p.id}" class="memo-box ${hasMore?'has-more':''}">${esc(p.메모||'메모 없음')}</div>
-          ${hasMore?`<button class="memo-expand-btn" id="m-btn-${p.id}" onclick="toggleMemo('${p.id}')">▼</button>`:''}
+          <div id="m-box-${p.id}" class="memo-box ${hasMore?'has-more':''}" onclick="startMemoEdit('${p.id}')" title="클릭하여 편집" style="cursor:pointer">${esc(p.메모||'메모 없음')}</div>
+          ${hasMore?`<button class="memo-expand-btn" id="m-btn-${p.id}" onclick="event.stopPropagation();toggleMemo('${p.id}')">▼</button>`:''}
+          <div id="m-edit-${p.id}" style="display:none;margin-top:6px">
+            <textarea id="m-txt-${p.id}" style="width:100%;padding:8px;border:1.5px solid var(--accent-m);border-radius:var(--rs);font-family:'Pretendard',sans-serif;font-size:12px;line-height:1.6;resize:vertical;min-height:100px;outline:none;" onclick="event.stopPropagation()">${esc(p.메모||'')}</textarea>
+            <div style="display:flex;gap:6px;margin-top:4px">
+              <button onclick="saveMemo('${p.id}')" style="padding:4px 12px;background:var(--accent);color:#fff;border:none;border-radius:var(--rs);font-size:11px;font-weight:700;cursor:pointer">💾 저장</button>
+              <button onclick="cancelMemoEdit('${p.id}')" style="padding:4px 10px;background:var(--warm);border:1px solid var(--bd);border-radius:var(--rs);font-size:11px;cursor:pointer">취소</button>
+            </div>
+          </div>
         </div>
       </td>
       <td class="draft-cell">
@@ -387,6 +394,35 @@ function renderTable() {
       </td>
     </tr>`;
   }).join('') || `<tr><td colspan="6" style="text-align:center;padding:50px;color:var(--ink-f);font-size:13px">해당 기간에 CRM 예정 환자가 없습니다.</td></tr>`;
+}
+
+function startMemoEdit(id) {
+  document.getElementById('m-box-'+id).style.display = 'none';
+  const editDiv = document.getElementById('m-edit-'+id);
+  editDiv.style.display = 'block';
+  const btn = document.getElementById('m-btn-'+id);
+  if (btn) btn.style.display = 'none';
+  document.getElementById('m-txt-'+id).focus();
+}
+
+function cancelMemoEdit(id) {
+  document.getElementById('m-box-'+id).style.display = '';
+  document.getElementById('m-edit-'+id).style.display = 'none';
+  const btn = document.getElementById('m-btn-'+id);
+  if (btn) btn.style.display = '';
+}
+
+async function saveMemo(id) {
+  const newMemo = document.getElementById('m-txt-'+id).value.trim();
+  const p = patients.find(x => x.id === id);
+  try {
+    await notion(`/pages/${id}`, 'PATCH', {
+      properties: { '메모': { rich_text: [{ text: { content: newMemo } }] } }
+    });
+    p.메모 = newMemo;
+    toast('메모가 저장되었습니다.', 'ok');
+    renderTable();
+  } catch(e) { toast('저장 실패', 'err'); }
 }
 
 function toggleMemo(id) {
