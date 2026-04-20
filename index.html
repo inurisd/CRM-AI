@@ -266,15 +266,19 @@ async function notion(path, method, body) {
   return res.json();
 }
 
-async function callGemini(text) {
-  const res = await fetch('/api/notion?path=/gemini', {
+async function callGroq(prompt) {
+  const res = await fetch('/api/notion?path=/groq', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-crm-password': sessionPw },
-    body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text }] }] })
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.7
+    })
   });
-  if (!res.ok) throw new Error('Gemini 오류');
+  if (!res.ok) throw new Error('Groq 오류');
   const data = await res.json();
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  return data?.choices?.[0]?.message?.content || '';
 }
 
 async function callN8N(url, payload) {
@@ -382,6 +386,7 @@ function renderTable() {
             <button class="btn-gen" id="gen-btn-${p.id}" onclick="generateDraft('${p.id}')">✨ ${hasDraft?'재생성':'초안 생성'}</button>
             <button class="btn-pencil" id="pencil-${p.id}" onclick="toggleDraftEdit('${p.id}')" title="초안 수정">✏️</button>
           </div>
+          <input type="text" id="gen-hint-${p.id}" placeholder="추가 지시사항 (예: 내원 유도, 복약 확인...)" style="width:100%;padding:5px 8px;border:1px solid var(--bd);border-radius:var(--rs);font-family:'Pretendard',sans-serif;font-size:11px;color:var(--ink-m);background:var(--paper);outline:none;margin-bottom:6px;">
           <div class="draft-text ${hasDraft?'':'draft-empty'}" id="view-dt-${p.id}">${hasDraft?esc(p.CRM초안):'버튼을 눌러 AI 초안을 생성하세요.'}</div>
           <div class="draft-edit-panel" id="ep-${p.id}">
             <hr class="draft-divider">
@@ -497,13 +502,32 @@ async function saveDraft(id) {
 }
 
 async function generateDraft(id) {
-  const p = patients.find(x => x.id === id);
-  const btn = document.getElementById('gen-btn-'+id);
+  const p    = patients.find(x => x.id === id);
+  const btn  = document.getElementById('gen-btn-'+id);
+  const hint = document.getElementById('gen-hint-'+id)?.value?.trim() || '';
   btn.disabled = true; btn.textContent = '⏳ 생성 중...';
   toast(`${p.환자명||'환자'}님 초안 생성 중...`, 'info');
   try {
-    const prompt = `당신은 한의원 CRM 문자 작성 도우미입니다. 아래 환자 정보를 바탕으로 따뜻하고 친근한 톤의 CRM 문자 초안을 200자 이내로 작성해주세요. 문자 내용만 출력하세요.\n\n환자명: ${p.환자명}\n차트번호: ${p.차트번호}\nCRM예정일: ${p.CRM예정일}\n메모: ${p.메모}`;
-    const draft = await callGemini(prompt);
+    const prompt = `당신은 한의원 CRM 문자 작성 전문가입니다.
+
+아래 환자 정보와 메모를 바탕으로 CRM 문자 초안을 작성해주세요.
+
+작성 기준:
+1. 전체 메모를 읽고 환자의 전반적인 상태와 치료 경과를 파악하세요.
+2. 최근 2-3개월 내용을 중심으로 현재 상황에 맞는 문자를 작성하세요.
+3. 따뜻하고 친근한 톤으로, 환자가 부담없이 읽을 수 있도록 작성하세요.
+4. 200자 이내로 간결하게 작성하세요.
+5. 문자 내용만 출력하세요. 설명이나 부가 내용 없이.${hint ? '\n6. 추가 지시사항: ' + hint : ''}
+
+환자 정보:
+- 환자명: ${p.환자명}
+- 차트번호: ${p.차트번호}
+- CRM 예정일: ${p.CRM예정일}
+
+메모 전체 내용:
+${p.메모}`;
+
+    const draft = await callGroq(prompt);
     if (!draft) throw new Error('초안 생성 실패');
     const now = new Date().toLocaleDateString('ko-KR');
     const newMemo = (p.메모 ? p.메모 + '\n' : '') + `[${now} AI 초안 생성]`;
