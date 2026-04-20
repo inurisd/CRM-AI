@@ -353,7 +353,14 @@ function renderTable() {
       </td>
       <td>
         <div style="font-size:10px;color:var(--ink-m)">CRM 예정</div>
-        <div style="font-size:13px;font-weight:700;color:${p.CRM예정일?'var(--accent)':'var(--ink-f)'}">${p.CRM예정일||'미정'}</div>
+        <div id="crm-date-view-${p.id}" style="font-size:13px;font-weight:700;color:${p.CRM예정일?'var(--accent)':'var(--ink-f)'};cursor:pointer" onclick="startDateEdit('${p.id}','${p.CRM예정일||''}')" title="클릭하여 변경">${p.CRM예정일||'미정'}</div>
+        <div id="crm-date-edit-${p.id}" style="display:none;margin-top:4px">
+          <input type="date" id="crm-date-inp-${p.id}" value="${p.CRM예정일||''}" style="width:100%;padding:4px;border:1.5px solid var(--accent-m);border-radius:var(--rs);font-size:11px;outline:none;">
+          <div style="display:flex;gap:4px;margin-top:4px">
+            <button onclick="saveCrmDate('${p.id}')" style="padding:3px 8px;background:var(--accent);color:#fff;border:none;border-radius:var(--rs);font-size:10px;font-weight:700;cursor:pointer">저장</button>
+            <button onclick="cancelDateEdit('${p.id}')" style="padding:3px 6px;background:var(--warm);border:1px solid var(--bd);border-radius:var(--rs);font-size:10px;cursor:pointer">취소</button>
+          </div>
+        </div>
         <div style="font-size:10px;color:var(--ink-f)">등록 ${esc(p.등록일)}</div>
       </td>
       <td class="memo-cell">
@@ -394,6 +401,31 @@ function renderTable() {
       </td>
     </tr>`;
   }).join('') || `<tr><td colspan="6" style="text-align:center;padding:50px;color:var(--ink-f);font-size:13px">해당 기간에 CRM 예정 환자가 없습니다.</td></tr>`;
+}
+
+function startDateEdit(id, currentDate) {
+  document.getElementById('crm-date-view-'+id).style.display = 'none';
+  document.getElementById('crm-date-edit-'+id).style.display = 'block';
+  document.getElementById('crm-date-inp-'+id).value = currentDate;
+}
+
+function cancelDateEdit(id) {
+  document.getElementById('crm-date-view-'+id).style.display = '';
+  document.getElementById('crm-date-edit-'+id).style.display = 'none';
+}
+
+async function saveCrmDate(id) {
+  const newDate = document.getElementById('crm-date-inp-'+id).value;
+  if (!newDate) { toast('날짜를 선택해주세요.', 'err'); return; }
+  const p = patients.find(x => x.id === id);
+  try {
+    await notion(`/pages/${id}`, 'PATCH', {
+      properties: { 'CRM예정일': { date: { start: newDate } } }
+    });
+    p.CRM예정일 = newDate;
+    toast('CRM 예정일이 변경되었습니다.', 'ok');
+    renderTable();
+  } catch(e) { toast('저장 실패', 'err'); }
 }
 
 function startMemoEdit(id) {
