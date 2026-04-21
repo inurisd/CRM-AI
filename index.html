@@ -124,13 +124,6 @@ main { padding: 12px 2% 0; }
 .btn-ai-save:hover { background: #1e4a36; }
 .btn-ai-save:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* ── 5행: Bottom Bar ── */
-.add-bar { background: var(--card); border-top: 1px solid var(--bd); padding: 7px 2%; display: flex; align-items: center; gap: 10px; height: 48px; }
-.chart-inp { padding: 7px 12px; border: 2px solid var(--bd); border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 500; width: 260px; outline: none; transition: border-color .2s; color: var(--ink-m); }
-.chart-inp:focus { border-color: var(--accent); color: var(--ink); }
-.btn-plus { width: 34px; height: 34px; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
-.btn-plus:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(45,106,79,0.3); }
-
 /* ── 날짜 버튼 ── */
 .btn-today { padding: 4px 12px; background: #e8f1f8; border: 1.5px solid #1e6091; border-radius: var(--rs); font-family: 'Pretendard', sans-serif; font-size: 12px; font-weight: 700; color: #1e6091; cursor: pointer; transition: all .2s; white-space: nowrap; }
 .btn-today:hover { background: #1e6091; color: #fff; }
@@ -236,7 +229,7 @@ main { padding: 12px 2% 0; }
   </div>
 </main>
 
-<!-- ── 6행: CRM 추가 입력 ── -->
+<!-- ── CRM 추가 입력 ── -->
 <div class="crm-add-bar">
   <span class="crm-add-label">CRM 추가 내용</span>
   <textarea id="crm-add-text" class="crm-add-textarea" placeholder="예) 3번 A환자는 4월 11일 CRM 예정, 65번 B환자는 약 다 먹었는지 확인을 5월 2일 예정..."></textarea>
@@ -249,14 +242,6 @@ main { padding: 12px 2% 0; }
   </div>
 </div>
 
-<!-- ── 5행: BOTTOM BAR (주석 처리 - 필요시 활성화) ──
-<div class="add-bar">
-  <span style="font-size:12px;font-weight:800;color:var(--accent)">직접 등록</span>
-  <input type="text" id="chart-q" class="chart-inp" placeholder="추가할 차트번호 입력 후 Enter" onkeydown="if(event.key==='Enter')addFromChart()">
-  <button class="btn-plus" onclick="addFromChart()">+</button>
-  <div style="margin-left:auto;color:var(--ink-f);font-size:11px">© 아이누리한의원 CRM v1.0</div>
-</div>
--->
 <div style="text-align:right;padding:4px 2%;font-size:11px;color:var(--ink-f)">© 아이누리한의원 CRM v1.0</div>
 
 <div id="toast"></div>
@@ -269,7 +254,7 @@ const N8N_AI_URL = 'https://1jump2sky.duckdns.org/webhook/ai-crm-ai';
 let patients = [], curFilter = '전체', sessionPw = '', expandedMemoId = null;
 let sortField = 'CRM예정일', sortAsc = true;
 
-window.onload = () => {
+window.onload = function() {
   const saved = localStorage.getItem('crm_pw');
   if (saved) { sessionPw = saved; document.getElementById('login-screen').classList.add('off'); load(); }
   setToday();
@@ -304,7 +289,7 @@ async function callGroq(prompt) {
 async function callN8N(url, payload) {
   const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
   if (!res.ok) throw new Error('n8n 오류');
-  return res.json().catch(() => ({}));
+  return res.json().catch(function() { return {}; });
 }
 
 function setToday(autoLoad) {
@@ -313,6 +298,7 @@ function setToday(autoLoad) {
   document.getElementById('date-to').value   = t;
   if (autoLoad) load();
 }
+
 function setThisWeek(autoLoad) {
   const now = new Date();
   const sun = new Date(now); sun.setDate(now.getDate() - now.getDay());
@@ -321,6 +307,7 @@ function setThisWeek(autoLoad) {
   document.getElementById('date-to').value   = sat.toISOString().split('T')[0];
   if (autoLoad) load();
 }
+
 function setNextWeek() {
   const now = new Date();
   const sun = new Date(now); sun.setDate(now.getDate() - now.getDay() + 7);
@@ -329,6 +316,7 @@ function setNextWeek() {
   document.getElementById('date-to').value   = sat.toISOString().split('T')[0];
   load();
 }
+
 function setSort(field) {
   if (sortField === field) {
     sortAsc = !sortAsc;
@@ -344,6 +332,7 @@ function setSort(field) {
   document.getElementById('sort-chart-arrow').textContent = sortField === '차트번호' ? (sortAsc ? '↑' : '↓') : '↑';
   renderTable();
 }
+
 function clearDateFilter() {
   document.getElementById('date-from').value = '';
   document.getElementById('date-to').value   = '';
@@ -363,7 +352,7 @@ async function load() {
       if (to)   f.push({ property: 'CRM예정일', date: { on_or_before: to } });
       qb.filter = f.length === 1 ? f[0] : { and: f };
     }
-    const res = await notion(`/databases/${DB_ID}/query`, 'POST', qb);
+    const res = await notion('/databases/' + DB_ID + '/query', 'POST', qb);
     patients = res.results.map(parse);
     renderTable(); updateCounts();
   } catch(e) {
@@ -374,10 +363,10 @@ async function load() {
 
 function parse(page) {
   const p = page.properties;
-  const g = (k, t) => {
+  const g = function(k, t) {
     if (!p[k]) return '';
     if (t === 'title') return p[k].title?.[0]?.plain_text || '';
-    if (t === 'rt')    return p[k].rich_text?.map(x => x.plain_text).join('') || '';
+    if (t === 'rt')    return p[k].rich_text?.map(function(x) { return x.plain_text; }).join('') || '';
     if (t === 'sel')   return p[k].select?.name || '';
     if (t === 'date')  return p[k].date?.start || '';
     return '';
@@ -388,74 +377,73 @@ function parse(page) {
 function renderTable() {
   document.getElementById('load-st').style.display = 'none';
   document.getElementById('tbl-wrap').style.display = 'block';
-  let list = curFilter === '전체' ? [...patients] : patients.filter(p => p.발송상태 === curFilter);
-  list.sort((a, b) => {
+  let list = curFilter === '전체' ? [...patients] : patients.filter(function(p) { return p.발송상태 === curFilter; });
+  list.sort(function(a, b) {
     const av = a[sortField] || '';
     const bv = b[sortField] || '';
     return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
   });
-  document.getElementById('tmeta').innerText = `총 ${list.length}건`;
-  document.getElementById('tbody').innerHTML = list.map((p, i) => {
+  document.getElementById('tmeta').innerText = '총 ' + list.length + '건';
+  document.getElementById('tbody').innerHTML = list.map(function(p, i) {
     const hasMore  = (p.메모||'').length > 80 || (p.메모||'').split('\n').length > 3;
     const hasDraft = p.CRM초안 && p.CRM초안.trim();
-    return `
-    <tr id="row-${p.id}">
-      <td style="text-align:center;color:var(--ink-f);font-size:11px;font-weight:700">${i+1}</td>
-      <td>
-        <div style="font-weight:800;font-size:13px;margin-bottom:2px">${esc(p.환자명||'(이름없음)')}</div>
-        <div style="font-size:11px;color:var(--ink-m)">차트 ${esc(p.차트번호)}</div>
-      </td>
-      <td>
-        <div style="font-size:10px;color:var(--ink-m)">CRM 예정</div>
-        <div id="crm-date-view-${p.id}" style="font-size:13px;font-weight:700;color:${p.CRM예정일?'var(--accent)':'var(--ink-f)'};cursor:pointer" onclick="startDateEdit('${p.id}','${p.CRM예정일||''}')" title="클릭하여 변경">${p.CRM예정일||'미정'}</div>
-        <div id="crm-date-edit-${p.id}" style="display:none;margin-top:4px">
-          <input type="date" id="crm-date-inp-${p.id}" value="${p.CRM예정일||''}" style="width:100%;padding:4px;border:1.5px solid var(--accent-m);border-radius:var(--rs);font-size:11px;outline:none;">
-          <div style="display:flex;gap:4px;margin-top:4px">
-            <button onclick="saveCrmDate('${p.id}')" style="padding:3px 8px;background:var(--accent);color:#fff;border:none;border-radius:var(--rs);font-size:10px;font-weight:700;cursor:pointer">저장</button>
-            <button onclick="cancelDateEdit('${p.id}')" style="padding:3px 6px;background:var(--warm);border:1px solid var(--bd);border-radius:var(--rs);font-size:10px;cursor:pointer">취소</button>
-          </div>
-        </div>
-        <div style="font-size:10px;color:var(--ink-f)">등록 ${esc(p.등록일)}</div>
-      </td>
-      <td class="memo-cell">
-        <div class="memo-wrap">
-          <div id="m-box-${p.id}" class="memo-box ${hasMore?'has-more':''}" onclick="startMemoEdit('${p.id}')" title="클릭하여 편집" style="cursor:pointer">${esc(p.메모||'메모 없음')}</div>
-          ${hasMore?`<button class="memo-expand-btn" id="m-btn-${p.id}" onclick="event.stopPropagation();toggleMemo('${p.id}')">▼</button>`:''}
-          <div id="m-edit-${p.id}" style="display:none;margin-top:6px">
-            <textarea id="m-txt-${p.id}" style="width:100%;padding:8px;border:1.5px solid var(--accent-m);border-radius:var(--rs);font-family:'Pretendard',sans-serif;font-size:12px;line-height:1.6;resize:vertical;min-height:100px;outline:none;" onclick="event.stopPropagation()">${esc(p.메모||'')}</textarea>
-            <div style="display:flex;gap:6px;margin-top:4px">
-              <button onclick="saveMemo('${p.id}')" style="padding:4px 12px;background:var(--accent);color:#fff;border:none;border-radius:var(--rs);font-size:11px;font-weight:700;cursor:pointer">💾 저장</button>
-              <button onclick="cancelMemoEdit('${p.id}')" style="padding:4px 10px;background:var(--warm);border:1px solid var(--bd);border-radius:var(--rs);font-size:11px;cursor:pointer">취소</button>
-            </div>
-          </div>
-        </div>
-      </td>
-      <td class="draft-cell">
-        <div class="draft-wrap">
-          <div class="draft-header">
-            <button class="btn-gen" id="gen-btn-${p.id}" onclick="generateDraft('${p.id}')">✨ ${hasDraft?'재생성':'초안 생성'}</button>
-            <input type="text" id="gen-hint-${p.id}" placeholder="추가 지시사항 (예: 내원 유도, 복약 확인, 다음 처방...)" style="flex:1;padding:4px 8px;border:1px solid var(--bd);border-radius:var(--rs);font-family:'Pretendard',sans-serif;font-size:11px;color:var(--ink-m);background:var(--paper);outline:none;">
-            <button class="btn-pencil" id="pencil-${p.id}" onclick="toggleDraftEdit('${p.id}')" title="초안 수정">✏️</button>
-          </div>
-          <div class="draft-text ${hasDraft?'':'draft-empty'}" id="view-dt-${p.id}">${hasDraft?esc(p.CRM초안):'버튼을 눌러 AI 초안을 생성하세요.'}</div>
-          <div class="draft-edit-panel" id="ep-${p.id}">
-            <hr class="draft-divider">
-            <span class="draft-edit-label">✏️ 초안 수정안</span>
-            <textarea class="draft-edit-txt" id="dt-${p.id}" placeholder="수정할 내용을 입력하세요...">${esc(p.CRM초안)}</textarea>
-            <button class="draft-save-btn" onclick="saveDraft('${p.id}')">💾 수정안 저장</button>
-          </div>
-        </div>
-      </td>
-      <td class="stat-cell">
-        <select class="stat-sel" onchange="updateStat('${p.id}', this.value)">
-          <option ${p.발송상태==='대기'?'selected':''}>대기</option>
-          <option ${p.발송상태==='검토완료'?'selected':''}>검토완료</option>
-          <option ${p.발송상태==='보류'?'selected':''}>보류</option>
-          <option ${p.발송상태==='발송완료'?'selected':''}>발송완료</option>
-        </select>
-      </td>
-    </tr>`;
-  }).join('') || `<tr><td colspan="6" style="text-align:center;padding:50px;color:var(--ink-f);font-size:13px">해당 기간에 CRM 예정 환자가 없습니다.</td></tr>`;
+    return '<tr id="row-' + p.id + '">' +
+      '<td style="text-align:center;color:var(--ink-f);font-size:11px;font-weight:700">' + (i+1) + '</td>' +
+      '<td>' +
+        '<div style="font-weight:800;font-size:13px;margin-bottom:2px">' + esc(p.환자명||'(이름없음)') + '</div>' +
+        '<div style="font-size:11px;color:var(--ink-m)">차트 ' + esc(p.차트번호) + '</div>' +
+      '</td>' +
+      '<td>' +
+        '<div style="font-size:10px;color:var(--ink-m)">CRM 예정</div>' +
+        '<div id="crm-date-view-' + p.id + '" style="font-size:13px;font-weight:700;color:' + (p.CRM예정일?'var(--accent)':'var(--ink-f)') + ';cursor:pointer" onclick="startDateEdit(\'' + p.id + '\',\'' + (p.CRM예정일||'') + '\')" title="클릭하여 변경">' + (p.CRM예정일||'미정') + '</div>' +
+        '<div id="crm-date-edit-' + p.id + '" style="display:none;margin-top:4px">' +
+          '<input type="date" id="crm-date-inp-' + p.id + '" value="' + (p.CRM예정일||'') + '" style="width:100%;padding:4px;border:1.5px solid var(--accent-m);border-radius:var(--rs);font-size:11px;outline:none;">' +
+          '<div style="display:flex;gap:4px;margin-top:4px">' +
+            '<button onclick="saveCrmDate(\'' + p.id + '\')" style="padding:3px 8px;background:var(--accent);color:#fff;border:none;border-radius:var(--rs);font-size:10px;font-weight:700;cursor:pointer">저장</button>' +
+            '<button onclick="cancelDateEdit(\'' + p.id + '\')" style="padding:3px 6px;background:var(--warm);border:1px solid var(--bd);border-radius:var(--rs);font-size:10px;cursor:pointer">취소</button>' +
+          '</div>' +
+        '</div>' +
+        '<div style="font-size:10px;color:var(--ink-f)">등록 ' + esc(p.등록일) + '</div>' +
+      '</td>' +
+      '<td class="memo-cell">' +
+        '<div class="memo-wrap">' +
+          '<div id="m-box-' + p.id + '" class="memo-box ' + (hasMore?'has-more':'') + '" onclick="startMemoEdit(\'' + p.id + '\')" title="클릭하여 편집" style="cursor:pointer">' + esc(p.메모||'메모 없음') + '</div>' +
+          (hasMore ? '<button class="memo-expand-btn" id="m-btn-' + p.id + '" onclick="event.stopPropagation();toggleMemo(\'' + p.id + '\')">▼</button>' : '') +
+          '<div id="m-edit-' + p.id + '" style="display:none;margin-top:6px">' +
+            '<textarea id="m-txt-' + p.id + '" style="width:100%;padding:8px;border:1.5px solid var(--accent-m);border-radius:var(--rs);font-family:\'Pretendard\',sans-serif;font-size:12px;line-height:1.6;resize:vertical;min-height:100px;outline:none;" onclick="event.stopPropagation()">' + esc(p.메모||'') + '</textarea>' +
+            '<div style="display:flex;gap:6px;margin-top:4px">' +
+              '<button onclick="saveMemo(\'' + p.id + '\')" style="padding:4px 12px;background:var(--accent);color:#fff;border:none;border-radius:var(--rs);font-size:11px;font-weight:700;cursor:pointer">💾 저장</button>' +
+              '<button onclick="cancelMemoEdit(\'' + p.id + '\')" style="padding:4px 10px;background:var(--warm);border:1px solid var(--bd);border-radius:var(--rs);font-size:11px;cursor:pointer">취소</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</td>' +
+      '<td class="draft-cell">' +
+        '<div class="draft-wrap">' +
+          '<div class="draft-header">' +
+            '<button class="btn-gen" id="gen-btn-' + p.id + '" onclick="generateDraft(\'' + p.id + '\')">✨ ' + (hasDraft?'재생성':'초안 생성') + '</button>' +
+            '<input type="text" id="gen-hint-' + p.id + '" placeholder="추가 지시사항 (예: 내원 유도, 복약 확인...)" style="flex:1;padding:4px 8px;border:1px solid var(--bd);border-radius:var(--rs);font-family:\'Pretendard\',sans-serif;font-size:11px;color:var(--ink-m);background:var(--paper);outline:none;">' +
+            '<button class="btn-pencil" id="pencil-' + p.id + '" onclick="toggleDraftEdit(\'' + p.id + '\')" title="초안 수정">✏️</button>' +
+          '</div>' +
+          '<div class="draft-text ' + (hasDraft?'':'draft-empty') + '" id="view-dt-' + p.id + '">' + (hasDraft?esc(p.CRM초안):'버튼을 눌러 AI 초안을 생성하세요.') + '</div>' +
+          '<div class="draft-edit-panel" id="ep-' + p.id + '">' +
+            '<hr class="draft-divider">' +
+            '<span class="draft-edit-label">✏️ 초안 수정안</span>' +
+            '<textarea class="draft-edit-txt" id="dt-' + p.id + '" placeholder="수정할 내용을 입력하세요...">' + esc(p.CRM초안) + '</textarea>' +
+            '<button class="draft-save-btn" onclick="saveDraft(\'' + p.id + '\')">💾 수정안 저장</button>' +
+          '</div>' +
+        '</div>' +
+      '</td>' +
+      '<td class="stat-cell">' +
+        '<select class="stat-sel" onchange="updateStat(\'' + p.id + '\', this.value)">' +
+          '<option ' + (p.발송상태==='대기'?'selected':'') + '>대기</option>' +
+          '<option ' + (p.발송상태==='검토완료'?'selected':'') + '>검토완료</option>' +
+          '<option ' + (p.발송상태==='보류'?'selected':'') + '>보류</option>' +
+          '<option ' + (p.발송상태==='발송완료'?'selected':'') + '>발송완료</option>' +
+        '</select>' +
+      '</td>' +
+    '</tr>';
+  }).join('') || '<tr><td colspan="6" style="text-align:center;padding:50px;color:var(--ink-f);font-size:13px">해당 기간에 CRM 예정 환자가 없습니다.</td></tr>';
 }
 
 function startDateEdit(id, currentDate) {
@@ -472,9 +460,9 @@ function cancelDateEdit(id) {
 async function saveCrmDate(id) {
   const newDate = document.getElementById('crm-date-inp-'+id).value;
   if (!newDate) { toast('날짜를 선택해주세요.', 'err'); return; }
-  const p = patients.find(x => x.id === id);
+  const p = patients.find(function(x) { return x.id === id; });
   try {
-    await notion(`/pages/${id}`, 'PATCH', {
+    await notion('/pages/'+id, 'PATCH', {
       properties: { 'CRM예정일': { date: { start: newDate } } }
     });
     p.CRM예정일 = newDate;
@@ -485,8 +473,7 @@ async function saveCrmDate(id) {
 
 function startMemoEdit(id) {
   document.getElementById('m-box-'+id).style.display = 'none';
-  const editDiv = document.getElementById('m-edit-'+id);
-  editDiv.style.display = 'block';
+  document.getElementById('m-edit-'+id).style.display = 'block';
   const btn = document.getElementById('m-btn-'+id);
   if (btn) btn.style.display = 'none';
   document.getElementById('m-txt-'+id).focus();
@@ -501,9 +488,9 @@ function cancelMemoEdit(id) {
 
 async function saveMemo(id) {
   const newMemo = document.getElementById('m-txt-'+id).value.trim();
-  const p = patients.find(x => x.id === id);
+  const p = patients.find(function(x) { return x.id === id; });
   try {
-    await notion(`/pages/${id}`, 'PATCH', {
+    await notion('/pages/'+id, 'PATCH', {
       properties: { '메모': { rich_text: [{ text: { content: newMemo } }] } }
     });
     p.메모 = newMemo;
@@ -517,7 +504,7 @@ function toggleMemo(id) {
     const pb = document.getElementById('m-box-'+expandedMemoId);
     const pb2 = document.getElementById('m-btn-'+expandedMemoId);
     if (pb) pb.classList.remove('open');
-    if (pb2) { pb2.textContent = '▼'; }
+    if (pb2) pb2.textContent = '▼';
   }
   const box = document.getElementById('m-box-'+id);
   const btn = document.getElementById('m-btn-'+id);
@@ -532,7 +519,7 @@ function toggleDraftEdit(id) {
   const isOn = ep.classList.toggle('on');
   btn.classList.toggle('on', isOn);
   if (isOn) {
-    const p = patients.find(x => x.id === id);
+    const p = patients.find(function(x) { return x.id === id; });
     document.getElementById('dt-'+id).value = p.CRM초안 || '';
   }
 }
@@ -540,11 +527,14 @@ function toggleDraftEdit(id) {
 async function saveDraft(id) {
   const newDraft = document.getElementById('dt-'+id).value.trim();
   if (!newDraft) { toast('수정안을 입력하세요.', 'err'); return; }
-  const p = patients.find(x => x.id === id);
+  const p = patients.find(function(x) { return x.id === id; });
   const now = new Date().toLocaleDateString('ko-KR');
-  const newMemo = (p.메모 ? p.메모 + '\n' : '') + `[${now} 수정안 저장]`;
+  const newMemo = (p.메모 ? p.메모 + '\n' : '') + '[' + now + ' 수정안 저장]';
   try {
-    await notion(`/pages/${id}`, 'PATCH', { properties: { 'CRM초안': { rich_text: [{ text: { content: newDraft } }] }, '메모': { rich_text: [{ text: { content: newMemo } }] } } });
+    await notion('/pages/'+id, 'PATCH', { properties: {
+      'CRM초안': { rich_text: [{ text: { content: newDraft } }] },
+      '메모': { rich_text: [{ text: { content: newMemo } }] }
+    }});
     p.CRM초안 = newDraft; p.메모 = newMemo;
     toast('수정안이 저장되었습니다.', 'ok');
     renderTable();
@@ -552,36 +542,37 @@ async function saveDraft(id) {
 }
 
 async function generateDraft(id) {
-  const p    = patients.find(x => x.id === id);
+  const p    = patients.find(function(x) { return x.id === id; });
   const btn  = document.getElementById('gen-btn-'+id);
-  const hint = document.getElementById('gen-hint-'+id)?.value?.trim() || '';
+  const hint = (document.getElementById('gen-hint-'+id) || {}).value || '';
+  const hintTrim = hint.trim();
   btn.disabled = true; btn.textContent = '⏳ 생성 중...';
-  toast(`${p.환자명||'환자'}님 초안 생성 중...`, 'info');
+  toast((p.환자명||'환자') + '님 초안 생성 중...', 'info');
   try {
-    const prompt = `당신은 한의원 CRM 문자 작성 전문가입니다.
-
-아래 환자 정보와 메모를 바탕으로 CRM 문자 초안을 작성해주세요.
-
-작성 기준:
-1. 전체 메모를 읽고 환자의 전반적인 상태와 치료 경과를 파악하세요.
-2. 최근 2-3개월 내용을 중심으로 현재 상황에 맞는 문자를 작성하세요.
-3. 따뜻하고 친근한 톤으로, 환자가 부담없이 읽을 수 있도록 작성하세요.
-4. 200자 이내로 간결하게 작성하세요.
-5. 문자 내용만 출력하세요. 설명이나 부가 내용 없이.${hint ? '\n6. 추가 지시사항: ' + hint : ''}
-
-환자 정보:
-- 환자명: ${p.환자명}
-- 차트번호: ${p.차트번호}
-- CRM 예정일: ${p.CRM예정일}
-
-메모 전체 내용:
-${p.메모}`;
+    const prompt = '당신은 한의원 CRM 문자 작성 전문가입니다. 반드시 순수한 한국어로만 작성하세요. 한자, 중국어, 일본어는 절대 사용하지 마세요.\n\n' +
+      '아래 환자 정보와 메모를 바탕으로 CRM 문자 초안을 작성해주세요.\n\n' +
+      '작성 기준:\n' +
+      '1. 전체 메모를 읽고 환자의 전반적인 상태와 치료 경과를 파악하세요.\n' +
+      '2. 최근 2-3개월 내용을 중심으로 현재 상황에 맞는 문자를 작성하세요.\n' +
+      '3. 따뜻하고 친근한 톤으로, 환자가 부담없이 읽을 수 있도록 작성하세요.\n' +
+      '4. 200자 이내로 간결하게 작성하세요.\n' +
+      '5. 문자 내용만 출력하세요. 설명이나 부가 내용 없이.\n' +
+      '6. 반드시 순수한 한국어로만 작성하세요. 한자, 중국어, 일본어는 절대 사용하지 마세요.' +
+      (hintTrim ? '\n7. 추가 지시사항: ' + hintTrim : '') + '\n\n' +
+      '환자 정보:\n' +
+      '- 환자명: ' + p.환자명 + '\n' +
+      '- 차트번호: ' + p.차트번호 + '\n' +
+      '- CRM 예정일: ' + p.CRM예정일 + '\n\n' +
+      '메모 전체 내용:\n' + p.메모;
 
     const draft = await callGroq(prompt);
     if (!draft) throw new Error('초안 생성 실패');
     const now = new Date().toLocaleDateString('ko-KR');
-    const newMemo = (p.메모 ? p.메모 + '\n' : '') + `[${now} AI 초안 생성]`;
-    await notion(`/pages/${id}`, 'PATCH', { properties: { 'CRM초안': { rich_text: [{ text: { content: draft } }] }, '메모': { rich_text: [{ text: { content: newMemo } }] } } });
+    const newMemo = (p.메모 ? p.메모 + '\n' : '') + '[' + now + ' AI 초안 생성]';
+    await notion('/pages/'+id, 'PATCH', { properties: {
+      'CRM초안': { rich_text: [{ text: { content: draft } }] },
+      '메모': { rich_text: [{ text: { content: newMemo } }] }
+    }});
     p.CRM초안 = draft; p.메모 = newMemo;
     toast('초안이 생성되었습니다!', 'ok');
     renderTable();
@@ -604,83 +595,87 @@ async function sendAI() {
     toast('AI가 분석하여 Notion에 저장했습니다!', 'ok');
     document.getElementById('crm-add-text').value = '';
     document.getElementById('crm-add-file').value = '';
-    setTimeout(() => load(), 2000);
+    setTimeout(function() { load(); }, 2000);
   } catch(e) { toast('전송 실패: ' + e.message, 'err'); }
   finally { btn.disabled = false; btn.textContent = '✨ AI 분석 후 Notion 저장'; }
 }
 
-async function addFromChart() {
-  const chart = document.getElementById('chart-q').value.trim();
-  if (!chart) return;
-  toast(`차트번호 ${chart} 조회 중...`, 'info');
-  try {
-    const res = await callN8N(N8N_URL, { action: 'READ', 차트번호: chart });
-    if (res.rows && res.rows.length > 0) { toast(`${res.rows.length}건 조회되었습니다.`, 'ok'); load(); }
-    else toast('해당 차트번호가 없습니다. 아래 CRM 추가 입력창을 이용해주세요.', 'info');
-  } catch(e) { toast('조회 실패', 'err'); }
-  document.getElementById('chart-q').value = '';
-}
-
 async function updateStat(id, val) {
   try {
-    const p = patients.find(x => x.id === id);
+    const p = patients.find(function(x) { return x.id === id; });
     const now = new Date().toLocaleDateString('ko-KR');
     const props = { '발송상태': { select: { name: val } } };
     if (val === '발송완료') {
-      const sentContent = p.CRM초안 ? `\n발송내용: ${p.CRM초안}` : '';
-      const newMemo = (p.메모 ? p.메모 + '\n' : '') + `[${now} 발송완료]${sentContent}`;
+      const sentContent = p.CRM초안 ? '\n발송내용: ' + p.CRM초안 : '';
+      const newMemo = (p.메모 ? p.메모 + '\n' : '') + '[' + now + ' 발송완료]' + sentContent;
       props['메모'] = { rich_text: [{ text: { content: newMemo } }] };
       p.메모 = newMemo;
     }
-    await notion(`/pages/${id}`, 'PATCH', { properties: props });
+    await notion('/pages/'+id, 'PATCH', { properties: props });
     if (p) p.발송상태 = val;
     updateCounts();
-    toast(`상태 변경: ${val}`, 'ok');
+    toast('상태 변경: ' + val, 'ok');
   } catch(e) { toast('상태 변경 실패', 'err'); }
 }
 
 function updateCounts() {
   const counts = { '전체': patients.length, '대기': 0, '검토완료': 0, '보류': 0, '발송완료': 0 };
-  patients.forEach(p => { if (counts[p.발송상태] !== undefined) counts[p.발송상태]++; });
-  Object.keys(counts).forEach(k => { const el = document.getElementById('c-'+k); if(el) el.innerText = counts[k]; });
-  document.getElementById('qcnt').innerText = `미발송: ${patients.filter(x=>x.발송상태!=='발송완료').length}건`;
+  patients.forEach(function(p) { if (counts[p.발송상태] !== undefined) counts[p.발송상태]++; });
+  Object.keys(counts).forEach(function(k) { const el = document.getElementById('c-'+k); if(el) el.innerText = counts[k]; });
+  document.getElementById('qcnt').innerText = '미발송: ' + patients.filter(function(x) { return x.발송상태 !== '발송완료'; }).length + '건';
 }
 
-async function doLogin() {
+function doLogin() {
   const pw = document.getElementById('pw-input').value;
   if (!pw) return;
-  try {
-    const res = await fetch('/api/notion?path=/users/me', { method: 'GET', headers: { 'x-crm-password': pw } });
-    if (res.status === 401) { document.getElementById('login-err').innerText = '비밀번호가 올바르지 않습니다.'; return; }
+  fetch('/api/notion?path=/users/me', {
+    method: 'GET',
+    headers: { 'x-crm-password': pw }
+  }).then(function(res) {
+    if (res.status === 401) {
+      document.getElementById('login-err').innerText = '비밀번호가 올바르지 않습니다.';
+      return;
+    }
     sessionPw = pw;
     if (document.getElementById('remember-chk').checked) localStorage.setItem('crm_pw', pw);
     document.getElementById('login-screen').classList.add('off');
     load();
-  } catch(e) { document.getElementById('login-err').innerText = '서버 연결 실패'; }
+  }).catch(function() {
+    document.getElementById('login-err').innerText = '서버 연결 실패';
+  });
 }
 
 function logout() { localStorage.removeItem('crm_pw'); location.reload(); }
+
 function togglePw() {
   const input = document.getElementById('pw-input');
   input.type = input.type === 'password' ? 'text' : 'password';
   document.getElementById('pw-eye').innerText = input.type === 'password' ? '👁' : '🔒';
 }
+
 function onCrmFileSelect(input) {
-  document.getElementById('crm-upload-label').childNodes[1].textContent = input.files[0] ? `📎 ${input.files[0].name}` : '📄 파일 첨부 (.txt)';
+  const label = document.getElementById('crm-upload-label');
+  const textNode = Array.from(label.childNodes).find(function(n) { return n.nodeType === 3; });
+  if (textNode) textNode.textContent = input.files[0] ? '📎 ' + input.files[0].name : '📄 파일 첨부 (.txt)';
 }
+
 function setF(f, el) {
   curFilter = f;
-  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.ftab').forEach(function(t) { t.classList.remove('on'); });
   el.classList.add('on');
   renderTable();
 }
+
 function toast(msg, type) {
   const t = document.getElementById('toast');
   t.innerText = msg; t.className = 'on ' + type;
-  clearTimeout(t._t); t._t = setTimeout(() => t.className = '', 3500);
+  clearTimeout(t._t); t._t = setTimeout(function() { t.className = ''; }, 3500);
 }
+
 function esc(str) {
-  return !str ? '' : String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
+  return !str ? '' : String(str).replace(/[&<>"']/g, function(m) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m];
+  });
 }
 </script>
 </body>
